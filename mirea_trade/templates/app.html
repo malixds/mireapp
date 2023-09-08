@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <title>MIREA TRADE</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link href="{% static 'mirea_trade/css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+
+    <!-- jquery -->
+    <script src="{% static 'mirea_trade/js/jquery.min.js' %}"></script>
+
+
+    <!-- select2 -->
+    <script src="{% static 'mirea_trade/js/select2.min.js' %}"></script>
+    <link href="{% static 'mirea_trade/css/select2.min.css' %}" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static '/mirea_trade/css/styles.css' %}">
+
+</head>
+
+
+
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    {% block content %}
+
+    {% endblock %}
+
+
+    <!-- Scripts -->
+    <script src="{% static 'mirea_trade/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'mirea_trade/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'mirea_trade/js/script.js' %}"></script>
+    <script src="{% static 'mirea_trade/js/charCounter.js' %}"></script>
+</body>
+
+</html>

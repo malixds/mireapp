@@ -1,0 +1,48 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+
+
+<div class="info mt-3">
+    <div class="container">
+        <div class="info__skills">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h5>Загрузите свою фотографию</h5>
+                <div class="col-9">
+                    <input class="form-control mb-4 col-lg-9" type="file" id="id_photo" multiple>
+                </div>
+
+
+                <h5>Напишите о себе</h5>
+                <p> Опишите, что вы умеете делать, свои навыки и сильные стороны.</p>
+                <div class="mb-3 col-9">
+                    <textarea name="about" type="text" class="form-control" id="id_about"
+                        placeholder="Ваше представление заказчикам">{{ userprofile.about}}</textarea>
+                </div>
+                <p>Выберите предметы, по которым способны предоставлять услуги.</p>
+                <div class="mb-3 col-lg-9">
+                    <select class="js-example-basic-multiple" name="skills" style="width: 100%;" multiple>
+                        {% for skill in skills %}
+                        <option value="{{ skill.id }}">{{ skill.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <p>Оставьте свой телеграм для связи с заказчиком.</p>
+                <div class="col-9 mb-3">
+                    <input name="contact_link" type="text" id="inputTg" value="{{ userprofile.contact_link}}"
+                        class="form-control" placeholder="Telegram" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <title>DigiMedia - Creative SEO HTML5 Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../static/assets/css/styles.css">
+    <!--
+
+TemplateMo 568 DigiMedia
+
+https://templatemo.com/tm-568-digimedia
+
+-->
+</head>
+
+
+
+
+<body>
+    <div class="parent">
+        <div class="col-lg-4 col-xs-6 m-auto signup block">
+            <h3>Please Sign Up</h3>
+            <form class="" method="POST" action="">
+                {% csrf_token %}
+
+                <!-- Отобразить ошибки формы, если они есть -->
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for error in form.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Отобразить форму с подсказками и placeholder'ами -->
+                <div class="form-group mb-3">
+                    <input type="text" id="inputUsername" name="username" class="form-control"
+                        placeholder="Имя пользователя" required autofocus>
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <input type="text" id="inputEmail" name="email" class="form-control" placeholder="Почта" required
+                        autofocus>
+                </div>
+                <div class="form-group mb-3">
+                    <input type="password" id="inputPassword1" name="password1" class="form-control"
+                        placeholder="Пароль" required autofocus>
+                </div>
+                <div class="form-group mb-3">
+                    <input type="password" id="inputPassword2" name="password2" class="form-control"
+                        placeholder="Повторите пароль" required autofocus>
+                </div>
+                <input type="submit" value="Sign Up" class="btn btn-primary" />
+                <a href="{% url 'signin' %}" class="btn btn-outline-primary" method="POST">Sign In</a>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/assets/js/owl-carousel.js"></script>
+    <script src="../static/assets/js/animation.js"></script>
+    <script src="../static/assets/js/imagesloaded.js"></script>
+    <script src="../static/assets/js/custom.js"></script>
+
+</body>
+
+</html>

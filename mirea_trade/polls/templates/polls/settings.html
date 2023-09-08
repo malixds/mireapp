@@ -1,0 +1,58 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+{% if request.user.userprofile.status == 'regular' %}
+<div class="settings">
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="col-lg-8 col-xs-9 mb-4">
+                <h5 class="mt-3">Ваш Телеграм</h5>
+                <input name="contact_link" type="text" value="{{user_profile.contact_link}}" id="inputTitle"
+                    class="form-control" placeholder="Введите телеграм" maxlength="100" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Сохранить
+            </button>
+        </form>
+    </div>
+</div>
+
+
+{% else %}
+<div class="settings">
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <h5 class="mt-3">Загрузите свою фотографию</h5>
+            <div class="col-9 ">
+                <input class="form-control mb-4 col-lg-9" type="file" id="id_photo">
+            </div>
+            <h5>Напишите о себе</h5>
+            <p> Опишите, что вы умеете делать, свои навыки и сильные стороны.</p>
+            <div class="mb-3 col-9">
+                <textarea name="about" type="text" class="form-control" id="id_about" value="{{user_profile.about}}"
+                    placeholder="Ваше представление заказчикам">{{ user_profile.about}}</textarea>
+            </div>
+            <p>Выберите предметы, по которым способны предоставлять услуги.</p>
+            <div class="mb-3 col-lg-9">
+                <select value="{{ skills.name }}" class="js-example-basic-multiple" name="skills" style="width: 100%;" multiple>
+                    {% for skill in skills %}
+                    <option value="{{ skill.id }}">{{ skill.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <p>Оставьте свой телеграм для связи с заказчиком.</p>
+            <div class="col-9 mb-3">
+                <input name="contact_link" type="text" id="inputTg" value="{{user_profile.contact_link}}"
+                    class="form-control" placeholder="Telegram" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

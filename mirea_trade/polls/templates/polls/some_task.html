@@ -1,0 +1,48 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+<div class="fulltask">
+    <div class="container">
+        <div class="fulltask__inner">
+            <h4>Заказчик</h4>
+            <div class="author col-lg-8 col-xs-9 mb-4 mt-3 d-flex">
+                <div class="author__img">
+                    <img src="" alt="">
+                </div>
+                <div class="author__info">
+                    <p>{{task.author.user.username}}</p>
+                    <a href="https://t.me/{{task.author.contact_link}}">Telegram</a>
+                </div>
+            </div>
+            <div class="fulltask__title col-lg-8 col-xs-9 mb-4 mt-3">
+                <h4>Заголовок задания</h4>
+                <p>{{task.title}}</p>
+            </div>
+            <div class="fulltask__desc col-lg-8 col-xs-9 mb-4 mt-3">
+                <h4>Описание задачи</h4>
+                <p>{{task.description}}</p>
+            </div>
+
+            <div class="fulltask__files col-lg-8 col-xs-9 mb-4 mt-3">
+                <h4>Приложенные файлы</h4>
+                <p>" ТУТ БУДУТ ФАЙЛЫ "</p>
+            </div>
+
+            <div class="row fulltask__info">
+                <div class="fulltask__info-budget col-lg-4 col-sm-6 mb-2">
+                    <h5>Бюджет</h5>
+                    <p>{{task.price}}</p>
+                </div>
+                <div class="fulltask__info-date col-lg-4 col-sm-6 mb-2">
+                    <h5>Дата выполнения</h5>
+                    <p>{{task.date}}</p>
+                </div>
+            </div>
+            <a class="btn btn-primary" href="{{task.author.contact_link}}">Связаться с клиентом</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

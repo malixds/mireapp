@@ -1,0 +1,47 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+
+<div class="search">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <form class="d-flex mt-2" role="search">
+          <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+          <button class="btn btn-primary" type="submit">Поиск</button>
+        </form>
+
+      </div>
+    </div>
+    <div class="row">
+      {% for profile in user_profiles %}
+      {% if profile.userprofile.about %}
+      <div class="col-lg-4 col-sm-6 col-xs-12">
+
+        <div class="card mt-2">
+          <div class="card-body">
+            <a href="{% url 'otherprofile' profile.username %}" class="card-title">{{profile.username}}</a>
+            <p class="card-text">{{profile.userprofile.about|truncatechars:100}}</p>
+
+            <p class="card-skills" style="font-size: 0.7re; background-color: gray;">
+              {% for skill in profile.userprofile.skills.all %}
+              {{ skill.name }}
+              {% endfor %}
+              <br>
+            {% if profile.username == request.user.username %}
+
+            <!-- <a href="{% url 'for-worker' pk=profile.pk %}" class="btn btn-primary">Предложить задание</a> -->
+            {% else %}
+            <a href="{% url 'for-worker' pk=profile.pk %}" class="btn btn-primary">Предложить задание</a>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

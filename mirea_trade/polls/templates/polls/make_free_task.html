@@ -1,0 +1,129 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+<section class="order">
+    <div class="container">
+        <h2 class="order__title mt-3">
+            Создание заказа
+        </h2>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="col-lg-8 col-xs-9 mb-4">
+                <h5>Заголовок задание</h5>
+                <input name="title" type="text" id="MyTextArea" class="form-control" placeholder="Введите заголовок"
+                    value="{{task.title}}" maxlength="100" required>
+                <span id="charCount" class="" style="font-size: 0.7rem;"><span>0</span>/100</span>
+            </div>
+
+            <div class="col-lg-8 col-xs-9 mb-3">
+
+                <h5>Описание задачи</h5>
+                <textarea type="text" class="form-control" id="formGroupExampleInput" name="description"
+                    placeholder="Опишите задание" maxlength="1000">{{task.description}}</textarea>
+                <span id="words__count-text" class="" style="font-size:0.7rem;"><span
+                        id="textcount">0</span>/1000</span>
+
+            </div>
+
+            <div class="col-lg-8 col-xs-9 mb-3">
+                <h5>Укажите предмет</h5>
+                <select class="js-example-basic-multiple" name="skills" style="width: 100%;" multiple>
+                    {% for skill in skills %}
+                    <option value="{{ skill.id }}">{{ skill.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-lg-8 col-xs-9 mb-3">
+                <h5>Прикрепите файлы</h5>
+                <input class="form-control mb-4" type="file" id="formFileMultiple" multiple>
+            </div>
+
+            <div class="row order__info">
+                <div class="order__info-budget col-lg-4 col-sm-6 mb-2">
+                    <h5>Бюджет</h5>
+                    <input max="999999" name="price" value="{{task.price}}" type="text" id="inputBudget" class="form-control"
+                        placeholder="Введите цену" maxlength="100" required>
+                </div>
+                <div class="order__info-date col-lg-4 col-sm-6 mb-2">
+                    <h5>Дата выполнения</h5>
+                    <input id="startDate" name="date" class="form-control" type="date" value="{{task.date}}" />
+                </div>
+            </div>
+            <div class="col-lg-8 col-xs-9">
+                <h5>Оставьте средство связи с вами</h5>
+                <input name="contact_link" value="{{contact_link.price}}" type="text" id="inputBudget"
+                    class="form-control" placeholder="Введите телеграм-ник" maxlength="100" required>
+            </div>
+            <div class="col-lg-8 col-xs-9  mt-3" style="text-align: right;">
+                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Создать задание
+                </button>
+                <!-- ТУТ НУЖНО КАКОЕ ТО УСЛОВИЕ. ЕСЛИ ФОРМА ОТПРАВИЛАСЬ -->
+                <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Успех</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" style="text-align: left;">
+                                <p>Задание успешно создано!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                            </div>
+                        </div>
+                    </div> -->
+            </div>
+        </form>
+
+
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Успех</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="text-align: left;">
+                        <p>Задание успешно создано!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript для отображения модального окна после успешной отправки формы -->
+        <script>
+            $(document).ready(function () {
+                // Проверяем URL-параметр 'success' в адресной строке
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('success')) {
+                    // Если параметр 'success' присутствует, отображаем модальное окно
+                    $('#successModal').modal('show');
+                }
+            });
+        </script>
+        <!-- </div> -->
+        <!-- <div class="row col-lg-8 col-xs-12 order__info d-flex" style="justify-content: space-between; flex-wrap: wrap;">
+                <div class="order__info-budget mb-2 col-lg-5 col-xs-12">
+                    <h5>Бюджет</h5>
+                    <input type="text" id="inputBudget" class="form-control" placeholder="Введите цену" maxlength="100"
+                        required>
+                </div>
+                <div class="order__info-date col-lg-6 col-xs-12" >
+                    <h5>Дата выполнения</h5>
+                    <input id="startDate" class="form-control" type="date" />
+                </div>
+            </div> -->
+    </div>
+</section>
+
+{% endblock content %}

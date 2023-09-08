@@ -1,0 +1,32 @@
+{% extends 'app.html' %}
+
+{% block content %}
+
+<div class="task">
+    <div class="container">
+        <div class="task__inner">
+            {% if task in user_tasks %}
+            {% for task in user_tasks %}
+            <div class="task__item col-lg-9 col-sm-10 col-xs-12 mt-3 p-2"
+                style="border-radius: 10px; border: 2px solid #0d6efd;">
+                <h5 class="task__item-name">
+                    {{task.author}}
+                </h5>
+                <p>
+                    {{task.description}}
+                </p>
+                <p>{{task.price}}</p>
+
+                <p>{{task.date}}</p>
+                <p>{{task.author.contact_link}}</p>
+                <a href="{% url 'fulltask' pk=task.pk %}">Подробнее</a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h4 style="margin-top: 2rem; text-align: center;">У вас еще нет заданий</h4>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

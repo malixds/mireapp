@@ -1,0 +1,39 @@
+{% extends 'app.html' %}
+{% load static%}
+
+{% block content %}
+
+<div class="about">
+    <div class="container">
+        <div class="row about__block">
+            <div class="col-lg-6 col-sm-12 about__left">
+                <h3 class="about__title mb-3">
+                    MIREA TRADE
+                </h3>
+                <p class="about__text text-dark ">
+                    Выполняй задание - получай деньги.<br>
+                    Нанимай исполнителей - отчисляться рано
+                </p>
+                <p class="about__info text-muted">Здесь ты можешь разместить свое задание,
+                    отметив определенные предметы, можешь обратиться напрямую к понравившемуся исполнителю
+                    с предложением с сотрудничестве или же сам зарабатывать на своих знаниях.
+                </p>
+                <div class="about__links-group d-flex">
+                    <a href="make_free_task.html" class="become__worker about__links-item about__links-item-form">
+                        Создать задание
+                    </a>
+                    <a href="search_worker.html" class="search__worker about__links-item about__links-item-search">
+                        Искать исполнителя
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 about__right">
+                <!-- <img src="../static/images/todolist_man.png" alt=""> -->
+                <img class="about__right-img" src="{% static 'mirea_trade/images/allmight_woman.png' %}" alt=""
+                    width="350">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
