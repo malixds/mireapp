@@ -21,13 +21,13 @@
                     Исполнитель
                 </h5>
                 <div class="card-body-al d-flex">
-                    <div style="  display: flex;
-                    justify-content: center;
-                    align-items: center;" class="card-body-img">
+                    <div style="display: flex; justify-content: center; align-items: center;" class="card-body-img">
                         <a class="card-body-img-link" href="worker_profile.html">
                             <img style="width: 100px; height: 100px; border-radius: 100%;"
-                                src="/static/images/allmight_woman.jpg" alt=""></a>
+                                src="{{ user_profile.userprofile.photo }}" alt="">
+                        </a>
                     </div>
+
                     <div class="card-body">
                         <a class="card-body-name mb-1" value="{{user_profile.user.username}}"
                             style="text-decoration: none; color: #000; cursor: pointer;">{{user_profile.username}}
@@ -52,6 +52,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-8 col-xs-9 mb-3">
+                <p>
+                    Обо мне: <br>
+                    {{user_profile.userprofile.about}}
+
+                </p>
+            </div>
             <div class="col-lg-8 col-xs-9 mb-4">
                 <h5>Заголовок задание</h5>
                 <input name="title" type="text" value="{{task.title}}" id="inputTitle" class="form-control"
@@ -61,8 +68,9 @@
             </div>
             <div class="col-lg-8 col-xs-9 mb-3">
                 <h5>Описание задачи</h5>
-                <textarea type="text" name="description" value="{{task.description}}" class="form-control" id="formGroupExampleInput"
-                    placeholder="Опишите задание" maxlength="1000">{{task.description}}</textarea>
+                <textarea type="text" name="description" value="{{task.description}}" class="form-control"
+                    id="formGroupExampleInput" placeholder="Опишите задание"
+                    maxlength="1000">{{task.description}}</textarea>
                 <span id="words__count-text" class="" style="font-size:0.7rem;"><span
                         id="textcount">0</span>/1000</span>
 
@@ -87,8 +95,8 @@
             {% if user_profile.userprofile.contact_link is None %}
             <div class="col-lg-8 col-xs-9">
                 <h5>Оставьте средство связи с вами</h5>
-                <input type="text" id="inputTitle" name="contact_link" value="{{task.contact_link}}" class="form-control"
-                    placeholder="Телеграм" maxlength="100" required>
+                <input type="text" id="inputTitle" name="contact_link" value="{{task.contact_link}}"
+                    class="form-control" placeholder="Телеграм" maxlength="100" required>
             </div>
             {% endif %}
             <div class="col-lg-8 col-xs-9  mt-3" style="text-align: right;">
@@ -127,6 +135,15 @@
                 </div>
             </div> -->
         </form>
+        <div id="success-modal" class="modal col-lg-6" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p id="success-message">Операция выполнена успешно!</p>
+            </div>
+        </div>
+        <div data-url="{% url 'for-worker' pk=user_profile.pk %}" id="ajax-data" style="display: none;"></div>
+        <!-- Здесь храним URL -->
+        {% include 'success.html' %}
     </div>
 </section>
 

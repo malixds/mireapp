@@ -24,7 +24,7 @@
                         placeholder="Ваше представление заказчикам">{{ userprofile.about}}</textarea>
                 </div>
                 <p>Выберите предметы, по которым способны предоставлять услуги.</p>
-                <div class="mb-3 col-lg-9">
+                <div class="col-lg-8 col-xs-9 mb-3">
                     <select class="js-example-basic-multiple" name="skills" style="width: 100%;" multiple>
                         {% for skill in skills %}
                         <option value="{{ skill.id }}">{{ skill.name }}</option>
@@ -39,7 +39,54 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
+            <div id="success-modal" class="modal col-lg-6" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <p id="success-message">Операция выполнена успешно!</p>
+                </div>
+            </div>
+            <div data-url="{% url 'form-worker' %}" id="ajax-data" style="display: none;"></div>
+            <!-- Здесь храним URL -->
+            <script>
+                $(document).ready(function () {
+                    // console.log('JavaScript код загружен');
+                    $('form').submit(function (e) {
+                        console.log('JavaScript код загруженVVV');
+                        e.preventDefault();
+                        var ajaxUrl = $('#ajax-data').data('url');
+                        console.log(ajaxUrl)
+                        $.ajax({
+                            type: 'POST',
+                            url: ajaxUrl,
+                            data: $('form').serialize(),
+                            success: function (response) {
+                                console.log('asdasd', response.success)
+                                if (response.success == 'AAA') {
+                                    console.log(response)
+                                    console.log('aSDASDASDASDASDASD')
 
+                                    showModal();
+                                    setTimeout(function () {
+                                        // Перенаправляем на домашнюю страницу
+                                        window.location.href = '{% url "home" %}';
+                                    }, 2000);
+                                    console.log('JavaScript код загружен');
+                                } else {
+                                    closeModal();
+                                    console.log('JavaScript не код загружен');
+                                    // В случае ошибки, например, некорректной формы,
+                                    // вы можете добавить код для отображения сообщения об ошибке
+                                    console.error('Ошибка при отправке формы');
+                                }
+                            },
+                            error: function () {
+                                // Обработка ошибок AJAX-запроса, если необходимо
+                                console.log('Ошибка при выполнении AJAX-запроса');
+                            }
+                        });
+                    });
+                });
+            </script>
 
         </div>
     </div>

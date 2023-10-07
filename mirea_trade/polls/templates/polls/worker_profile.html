@@ -5,6 +5,8 @@
 <div class="worker__profile mt-3">
     <div class="container">
         <div class="row">
+            <img style="width: 100px; height: 100px; border-radius: 100%;"
+                                src="{{user.user.userprofile.photo}}">
             <h3>Имя: {{ user.user.username }}</h3>
             <!-- <img src=""> -->
             {% if user.user.userprofile.about %}
@@ -75,32 +77,31 @@
     <div class="container">
         <p style="display:inline-block; border-bottom: 2px solid #0d6efd;">Отзывы</p>
         <div class="row">
-            <form action="" method="POST">
+            <!-- <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
                 <div class="col-lg-8 pe-0">
                     <input type="text" id="inputTitle" class="form-control" placeholder="Написать комментарий..."
                         maxlength="100" required>
                 </div>
-                <div class="col-lg-3">
+                <div class="mt-2">
                     <button type="submit" class="btn btn-primary" value="Submit">Primary</button>
                 </div>
-            </form>
+            </form> -->
 
+            <div class="col-lg-8">
+                {% for comment in comments %}
+                <div class="comment-text">
+                    <img src="{{user.userprofile.photo}}" alt="">
+                    
+                    <p>{{comment.description}}</p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
 
 
-<div id="vk_comments"></div>
-<script type="text/javascript">
-    VK.Widgets.Comments('vk_comments');
-</script>
 
-
-<!-- Scripts -->
-<script type="text/javascript">
-    VK.init({
-        apiId: ВАШ_API_ID,
-        onlyWidgets: true
-    });
-</script>
 {% endblock %}

@@ -1,47 +1,116 @@
 {% extends 'app.html' %}
 
+
+{% load static %}
+
 {% block content %}
+
+
 
 
 <div class="search">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <form class="d-flex mt-2" role="search">
-          <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-          <button class="btn btn-primary" type="submit">Поиск</button>
-        </form>
-
-      </div>
+    <div class="col-lg-12 mb-3 mt-3">
+      <select class="js-example-basic-multiple" id="selected-subjects" style="width: 100%;" name="states[]"
+        multiple="multiple">
+        <option value="Электротехника">Электротехника</option>
+        <option value="Информатика">Информатика</option>
+        <option value="Математическая статистика">Математическая статистика</option>
+        <option value="SP">Системное программное обеспечение</option>
+        <option value="Схемотехника">Схемотехника</option>
+        <option value="PH">Физика</option>
+        <option value="LA">Линейная алгебра</option>
+        <option value="MA">Математический анализ</option>
+        <option value="TD">Технология передачи данных</option>
+        <option value="VM">Вычислительная математика</option>
+        <option value="BD">Базы данных</option>
+      </select>
     </div>
-    <div class="row">
-      {% for profile in user_profiles %}
-      {% if profile.userprofile.about %}
+
+
+    <div id="search" class="row">
+      {% for profile in profiles %}
+      {% if profile.about %}
       <div class="col-lg-4 col-sm-6 col-xs-12">
+        <div class="card mt-2" style="min-height: 270px;">
+          <div class=" card-body" style="  display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Распределение элементов поровну по вертикали */">
+            <a href="{% url 'otherprofile' profile.user.username %}" class="card-title">{{profile.user.username}}</a>
 
-        <div class="card mt-2">
-          <div class="card-body">
-            <a href="{% url 'otherprofile' profile.username %}" class="card-title">{{profile.username}}</a>
-            <p class="card-text">{{profile.userprofile.about|truncatechars:100}}</p>
+            <p class="card-text">{{profile.about|truncatechars:100}}</p>
 
-            <p class="card-skills" style="font-size: 0.7re; background-color: gray;">
-              {% for skill in profile.userprofile.skills.all %}
+            <p class="card-skills" style="font-size: 0.7re;">
+              {% for skill in profile.skills.all %}
               {{ skill.name }}
               {% endfor %}
               <br>
-            {% if profile.username == request.user.username %}
-
-            <!-- <a href="{% url 'for-worker' pk=profile.pk %}" class="btn btn-primary">Предложить задание</a> -->
+            </p>
+            {% if profile.user.username == request.user.username %}
             {% else %}
             <a href="{% url 'for-worker' pk=profile.pk %}" class="btn btn-primary">Предложить задание</a>
             {% endif %}
+
+            </a>
           </div>
         </div>
-
       </div>
       {% endif %}
       {% endfor %}
-    </div>
-  </div>
-</div>
-{% endblock content %}
+
+
+      <script>
+        $(document).ready(function () {
+          $('.js-example-basic-multiple').select2();
+
+          $('.js-example-basic-multiple').on('change', function () {
+            var selectedSubjects = $(this).val();
+            console.log(selectedSubjects);
+
+            // Отправьте AJAX-запрос для получения обновленного списка заданий
+            $.ajax({
+              url: '{% url "search" %}',
+              data: { selected_subjects: selectedSubjects },
+              dataType: 'json',
+              success: function (data) {
+                $('#search').empty();
+                var myArray = [];
+
+
+                // Обработайте JSON-данные и создайте соответствующие элементы HTML
+                $.each(data.profiles, function (index, profile) {
+                  console.log(index)
+
+                  var profileName = profile.username;
+                  var forworkerUrl = 'forworker' + '/' + profile.pk + '/';
+                  var profileUrl = 'u/' + profileName + '/';
+                  if (!myArray.includes(profileName)) {
+                    var profileElement = `
+                <!-- Отображение информации о задании, включая название, описание, цену и дату -->
+                <div class="col-lg-4 col-sm-6 col-xs-12">
+                  <div class="card mb-2" style="min-height: 270px;">
+                    <div class=" card-body" style="display: flex; flex-direction: column; justify-content: space-between;">
+                      <h5 class="card-title">${profileName}</h5>
+                      <p class="card-text">${profile.about}</p>
+                      <p class="card-subject">${profile.skills}</p>
+                      <a href="${forworkerUrl}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                  </div>
+                </div>
+              `;
+                    $('#search').append(profileElement);
+                    myArray.push(profileName);
+                    console.log(myArray)
+                  }
+
+
+                });
+              }
+            });
+          });
+        });
+
+      </script>
+
+
+      {% endblock content %}

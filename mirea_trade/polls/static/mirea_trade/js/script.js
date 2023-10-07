@@ -2,7 +2,11 @@ $(function () {
   $('.js-example-basic-multiple').select2();
 });
 
-myModal.addEventListener('shown.bs.modal', function () {
-  myInput.focus()
-})
+// console.log('JavaScript код загружен');
+function showModal() {
+  $('#success-modal').show();
+}
 
+function closeModal() {
+  $('#success-modal').hide();
+}

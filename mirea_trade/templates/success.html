@@ -1,0 +1,40 @@
+{% load static %}
+<script>
+    $(document).ready(function () {
+        // console.log('JavaScript код загружен');
+        $('form').submit(function (e) {
+            console.log('JavaScript код загруженASDASDASD');
+            e.preventDefault();
+            var ajaxUrl = $('#ajax-data').data('url');
+            $.ajax({
+                type: 'POST',
+                url: ajaxUrl,
+                data: $('form').serialize(),
+                success: function (response) {
+                    console.log(response.success)
+                    if (response.success == 'AAA') {
+                        console.log(response)
+                        console.log('aSDASDASDASDASDASD')
+
+                        showModal();
+                        setTimeout(function () {
+                            // Перенаправляем на домашнюю страницу
+                            window.location.href = '{% url "home" %}';
+                        }, 2000);
+                        console.log('JavaScript код загружен');
+                    } else {
+                        closeModal();
+                        console.log('JavaScript не код загружен');
+                        // В случае ошибки, например, некорректной формы,
+                        // вы можете добавить код для отображения сообщения об ошибке
+                        console.error('Ошибка при отправке формы');
+                    }
+                },
+                error: function () {
+                    // Обработка ошибок AJAX-запроса, если необходимо
+                    console.log('Ошибка при выполнении AJAX-запроса');
+                }
+            });
+        });
+    });
+</script>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserProfile, Task
+from .models import UserProfile, Task, Comment
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -25,6 +25,11 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['about', 'photo', 'contact_link', 'skills']
 
+    photo = forms.ImageField(
+        required=False,  # Поле фотографии теперь не обязательное
+        widget=forms.FileInput()
+    )
+
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -48,6 +53,16 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['contact_link']
+
+
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['author', 'executor', 'description']
+
+
 
 
 class SignUpForm(UserCreationForm):

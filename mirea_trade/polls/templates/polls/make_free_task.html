@@ -7,7 +7,7 @@
         <h2 class="order__title mt-3">
             Создание заказа
         </h2>
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="col-lg-8 col-xs-9 mb-4">
@@ -44,8 +44,8 @@
             <div class="row order__info">
                 <div class="order__info-budget col-lg-4 col-sm-6 mb-2">
                     <h5>Бюджет</h5>
-                    <input max="999999" name="price" value="{{task.price}}" type="text" id="inputBudget" class="form-control"
-                        placeholder="Введите цену" maxlength="100" required>
+                    <input max="999999" name="price" value="{{task.price}}" type="text" id="inputBudget"
+                        class="form-control" placeholder="Введите цену" maxlength="100" required>
                 </div>
                 <div class="order__info-date col-lg-4 col-sm-6 mb-2">
                     <h5>Дата выполнения</h5>
@@ -54,76 +54,25 @@
             </div>
             <div class="col-lg-8 col-xs-9">
                 <h5>Оставьте средство связи с вами</h5>
-                <input name="contact_link" value="{{contact_link.price}}" type="text" id="inputBudget"
+                <input name="contact_link" value="{{task.author.contact_link}}" type="text" id="inputBudget"
                     class="form-control" placeholder="Введите телеграм-ник" maxlength="100" required>
             </div>
             <div class="col-lg-8 col-xs-9  mt-3" style="text-align: right;">
                 <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Создать задание
                 </button>
-                <!-- ТУТ НУЖНО КАКОЕ ТО УСЛОВИЕ. ЕСЛИ ФОРМА ОТПРАВИЛАСЬ -->
-                <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Успех</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body" style="text-align: left;">
-                                <p>Задание успешно создано!</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
-                            </div>
-                        </div>
-                    </div> -->
             </div>
         </form>
-
-
-        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Успех</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" style="text-align: left;">
-                        <p>Задание успешно создано!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
-                    </div>
-                </div>
+        <div id="success-modal" class="modal col-lg-6" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <p id="success-message">Операция выполнена успешно!</p>
             </div>
         </div>
-
-        <!-- JavaScript для отображения модального окна после успешной отправки формы -->
-        <script>
-            $(document).ready(function () {
-                // Проверяем URL-параметр 'success' в адресной строке
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.has('success')) {
-                    // Если параметр 'success' присутствует, отображаем модальное окно
-                    $('#successModal').modal('show');
-                }
-            });
-        </script>
-        <!-- </div> -->
-        <!-- <div class="row col-lg-8 col-xs-12 order__info d-flex" style="justify-content: space-between; flex-wrap: wrap;">
-                <div class="order__info-budget mb-2 col-lg-5 col-xs-12">
-                    <h5>Бюджет</h5>
-                    <input type="text" id="inputBudget" class="form-control" placeholder="Введите цену" maxlength="100"
-                        required>
-                </div>
-                <div class="order__info-date col-lg-6 col-xs-12" >
-                    <h5>Дата выполнения</h5>
-                    <input id="startDate" class="form-control" type="date" />
-                </div>
-            </div> -->
+        <div data-url="{% url 'free-tasks' %}" id="ajax-data" style="display: none;"></div> <!-- Здесь храним URL -->
+        {% include 'success.html' %}
     </div>
 </section>
+
 
 {% endblock content %}

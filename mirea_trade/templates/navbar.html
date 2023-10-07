@@ -1,3 +1,4 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="/">MIREA TRADE</a>
@@ -28,19 +29,21 @@
             <div class="dropdown">
                 <a class="btn btn-primary dropdown-toggle p-0" href="#" role="button" id="dropdownMenuLink"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/static/images/profile(1).png" style="width: 25px;" alt="">
+                    <img src="{% static 'mirea_trade/images/profile(1).png' %}" style="width: 25px;" alt="">
                 </a>
 
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <li>
                         <a class="dropdown-item" href="{% url 'currentprofile' %}">Профиль</a>
                     </li>
+                    {% if request.user.is_authenticated %}
                     <li>
                         <a class="dropdown-item" href="{% url 'mytasks' %}">Мой список заказов</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{% url 'myjobs' %}">Мой список заданий</a>
                     </li>
+                    {% endif %}
                     {% if request.user.userprofile.status == 'worker' %}
                     <li>
                         <a class="dropdown-item" href="{% url 'settings' %}">Настройки</a>
@@ -50,9 +53,11 @@
                         <a class="dropdown-item" href="{% url 'settings' %}">Добавить телеграм</a>
                     </li>
                     {% else %}
+                    {% if request.user.is_authenticated %}
                     <li>
                         <a class="dropdown-item" href="{% url 'settings' %}">Изменить телеграм</a>
                     </li>
+                    {% endif %}
                     {% endif %}
                     <li>
                         {% if request.user.is_authenticated %}

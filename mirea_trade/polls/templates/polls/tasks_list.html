@@ -1,18 +1,20 @@
 {% extends 'app.html' %}
+{% load static%}
 
 {% block content %}
 
 
-<div class="tasks">
+<div class="tasks__list">
   <div class="container">
     <!-- <div class="row"> -->
     <div class="col-lg-12 mb-3 mt-3">
-      <select class="js-example-basic-multiple" style="width: 100%;" name="states[]" multiple="multiple">
-        <option value="AL">Электротехника</option>
-        <option value="WY">Информатика</option>
-        <option value="MS">Математическая статистика</option>
+      <select class="js-example-basic-multiple" id="selected-subjects" style="width: 100%;" name="states[]"
+        multiple="multiple">
+        <option value="Электротехника">Электротехника</option>
+        <option value="Информатика">Информатика</option>
+        <option value="Математическая статистика">Математическая статистика</option>
         <option value="SP">Системное программное обеспечение</option>
-        <option value="ST">Схемотехника</option>
+        <option value="Схемотехника">Схемотехника</option>
         <option value="PH">Физика</option>
         <option value="LA">Линейная алгебра</option>
         <option value="MA">Математический анализ</option>
@@ -21,65 +23,114 @@
         <option value="BD">Базы данных</option>
       </select>
     </div>
-    <div class="row">
+
+    <div id="task-list" class="col-lg-12 row tasks">
       {% for task in tasks %}
       {% if task.kind == 'task' %}
       <div class="col-lg-4 col-sm-6 col-xs-12">
-        <div class="card mt-2" style="min-height: 270px;">
-            <div class=" card-body" style="  display: flex;
+        <div class="card mb-2" style="min-height: 270px;">
+          <div class=" card-body" style="  display: flex;
             flex-direction: column;
             justify-content: space-between; /* Распределение элементов поровну по вертикали */">
-          <h5 class="card-title">{{task.author.user.username}}</h5>
-          <p class="card-text">{{task.description|truncatechars:100}}</p>
-          <p class="card-subject">
-            {% for skill in task.skills.all %}
-            {{ skill.name }}
-            {% endfor %}
-          </p>
-          <div class="card-body-reports mb-2" style="display: flex;">
+            <h5 class="card-title">{{task.author.user.username}}</h5>
+            <p class="card-text">{{task.title|truncatechars:100}}</p>
+            <p class="card-subject">
+              {% for skill in task.skills.all %}
+              {{ skill.name }}
+              {% endfor %}
+            </p>
+            <div class="card-body-reports mb-2" style="display: flex;">
 
-            <div class="card-body-reports-price me-3" style="display: flex; justify-content: space-between;">
-              <img src="/static/images/ruble.png" class="img-fluid" style="width: 20px; height: 20px; 
+              <div class="card-body-reports-price me-3" style="display: flex; justify-content: space-between;">
+                <p style="font-family: Montserrat; font-weight: 500;">₽</p>
+                <p class="card-body-number-report mb-0" style="font-size: 0.9rem;">{{task.price}}</p>
+              </div>
+              <div class="card-body-reports-date" style="display: flex; justify-content: space-between;">
+                <img src="{% static 'mirea_trade/images/calendar.png' %}" class="img-fluid" style="width: 20px; height: 20px; 
                 margin-right: 4px;" alt="">
-              <p class="card-body-number-report mb-0" style="font-size: 0.9rem;">{{task.price}}</p>
+                <p class="card-body-number-report mb-0" style="font-size: 0.9rem;">{{task.date}}</p>
+              </div>
             </div>
-            <div class="card-body-reports-date" style="display: flex; justify-content: space-between;">
-              <img src="/static/images/calendar.png" class="img-fluid" style="width: 20px; height: 20px; 
-                margin-right: 4px;" alt="">
-              <p class="card-body-number-report mb-0" style="font-size: 0.9rem;">{{task.date}}</p>
-            </div>
+
+            <a href="{% url 'fulltask' pk=task.pk %}" class="btn btn-primary">
+              Подробнее
+            </a>
           </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 
-          <a href="{% url 'fulltask' pk=task.pk %}" class="btn btn-primary">
-            Подробнее
-          </a>
 
-          <!-- Modal -->
-          <!-- {% if user.status == 'regular' %}
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Невозможно</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>Вы не можете выполнять задания, так как не заполнили анкету исполнителя. Сделайте это.</p>
-                </div>
-                <div class="modal-footer">
-                  <a class="btn btn-primary" href="form_worker.html">Стать исполнителем</a>
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+  <script>
+    $(document).ready(function () {
+      $('.js-example-basic-multiple').select2();
+
+      $('.js-example-basic-multiple').on('change', function () {
+        var selectedSubjects = $(this).val();
+
+        // Отправьте AJAX-запрос для получения обновленного списка заданий
+        $.ajax({
+          url: '{% url "tasks" %}',
+          data: { selected_subjects: selectedSubjects },
+          dataType: 'json',
+          success: function (data) {
+            $('#task-list').empty();
+            var myArray = [];
+
+            // Обработайте JSON-данные и создайте соответствующие элементы HTML
+            $.each(data.tasks, function (index, task) {
+              // console.log(index) 
+              var taskUrl = '/fulltask/' + task.pk;
+              console.log(taskUrl)
+              console.log(task.pk)
+              var skillsString = '';
+              var taskTitle = task.title
+
+
+              if (!myArray.includes(taskTitle)) {
+
+                var taskElement = `
+            <!-- Отображение информации о задании, включая название, описание, цену и дату -->
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+              <div class="card mb-2" style="min-height: 270px;">
+                <div class=" card-body" style="display: flex; flex-direction: column; justify-content: space-between;">
+                  <h5 class="card-title">${task.title}</h5>
+                  <p class="card-text">${task.description}</p>
+                  <p class="card-subject">${task.skills}</p>
+                  <div class="card-body-reports mb-2" style="display: flex;">
+                    <div class="card-body-reports-price me-3" style="display: flex; justify-content: space-between;">
+                      <p style="font-family: Montserrat; font-weight: 500;">₽</p>
+                      <p class="card-body-number-report mb-0" style="font-size: 0.9rem;">${task.price}</p>
+                    </div>
+                    <div class="card-body-reports-date" style="display: flex; justify-content: space-between;">
+                      <img src="{% static 'mirea_trade/images/calendar.png' %}" class="img-fluid" style="width: 20px; height: 20px; margin-right: 4px;" alt="">
+                      <p class="card-body-number-report mb-0" style="font-size: 0.9rem;">${task.date}</p>
+                    </div>
+                  </div>
+                  <a href="${taskUrl}" class="btn btn-primary">Подробнее</a>
                 </div>
               </div>
             </div>
-          </div>
-          {% endif %} -->
-        </div>
-      </div>
-    </div>
-    {% endif %}
-    {% endfor %}
+          `;
+          $('#task-list').append(taskElement);
+                    myArray.push(taskTitle);
+                    // console.log(myArray)
+              }
+              
+            });
+          }
+        });
+      });
+    });
+
+  </script>
 
 
-    {% endblock content %}
+
+
+
+  {% endblock content %}

@@ -18,7 +18,7 @@
                 <p>{{task.price}}</p>
 
                 <p>{{task.date}}</p>
-                <p>{{task.author.contact_link}}</p>
+                <p>TG: {{task.author.contact_link}}</p>
                 <a href="{% url 'fulltask' pk=task.pk %}">Подробнее</a>
             </div>
             {% endfor %}
