@@ -518,16 +518,44 @@ def rate(request, pk):
     task = Task.objects.get(pk=pk)
     executor_username = task.executor.pk
     userprofile = UserProfile.objects.get(user=executor_username)
-    print(' TASK !!! ',task.executor)
-    print(userprofile)
-    print(task.executor.rating)
+    grade_of_regular = task.report  # оценка, которую поставил пользователь на конерктное задание
+    number_of_reports_for_executor = userprofile.feedback  # количество отзывов, поставленных опреденному исполнителю
+    rating_of_executor = userprofile.rating  # рейтинг исполнителя
+
+    print("EXECUTOR:", userprofile)
+
     if request.method == 'POST':
-        rating = request.POST.get('rating')
-        print('RATING',rating)
-        userprofile.rating += int(rating)
+        rating = request.POST.get('rating') # из запроса получаем рейтинг, который поставил пользователь
+        print('Оценка', task.report)
+        if task.report == None or task.report == 0:       # если нет оценки, значит пользователь еще не отправлял свой отзыв
+            print('Первый отзыв на задание - увеличиваем количество отзывов на исполнителя')
+            userprofile.feedback += 1
+            print('Количество отзывов после операции', userprofile.feedback)
+            userprofile.save()
+
+        if task.report != 0:  # если оценка уже стоит, но пользователь хочет ее изменить
+            result = int(rating)-task.report  # определяем разницу между старой и новой оценкой
+        else:
+            result = 0  # если никакой оценки нет, то разность равна 0
+        task.save() # сохраняем изменения
+        print('Разнциа между новой оценкой и старой', result)
+        if result < 0:  # если пользователь уменьшил оценку
+            # то он старой оценки отнимаем 
+            userprofile.rating = userprofile.rating-abs(result)/userprofile.feedback
+        elif result > 0:
+            userprofile.rating = userprofile.rating+abs(result)/userprofile.feedback
+        elif result == 0 and task.report == 0:
+            userprofile.rating = (float(userprofile.rating)+float(rating))/userprofile.feedback
+        task.report = rating # меняем оценку пользователя для конкретного задания
+        task.save() 
         userprofile.save()
+        print("END!!!")
+        print('рейтинг исполнителя', userprofile.rating)
+        print('оценка, которую поставил пользователь на конерктное задание', grade_of_regular)
+        print('Результат', result)
+        print('Ответ из запроса', rating)
+        print('Количество отзывов отправленных исполнителю', userprofile.feedback)
         return redirect('myjobs')
-    print(task.executor.rating)
     return render(request, 'polls/myjobs.html')
 
 

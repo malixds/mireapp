@@ -42,6 +42,8 @@ class UserProfile(models.Model):
 
     status = models.CharField(max_length=20, default='regular')
 
+    feedback = models.IntegerField(default=0)
+
     created = models.DateTimeField(auto_now_add=True)
 
     orders = models.IntegerField(default=0)
@@ -75,7 +77,7 @@ class Task(models.Model):
     title = models.CharField(max_length=100)
     skills = models.ManyToManyField(Skill, related_name='tasks')
     status = models.CharField(max_length=20, default='default')
-    report = models.IntegerField(default=0)
+    report = models.IntegerField(null=True, blank=True)
     description = models.TextField()
     images = models.ImageField(
         null=True, blank=True, upload_to='images/', default='free-icon-user-149071.png')
