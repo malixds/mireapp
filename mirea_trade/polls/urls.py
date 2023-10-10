@@ -2,7 +2,6 @@ from django.urls import path, include
 from . import views
 
 
-
 urlpatterns = [
     path('', views.home, name='home'),
     path('forworker/<int:pk>/', views.for_worker, name='for-worker'),
@@ -23,7 +22,7 @@ urlpatterns = [
     path('deljobs/<int:pk>/delete', views.deleteTask, name='deljobs'),
     path('myorder/<int:pk>', views.myOrder, name='myorder'),
     path('success/', views.success, name='success'),
+    path('taskaccept/<int:pk>/accept', views.taskAccept, name='taskaccept'),
+    path('taskcancel/<int:pk>/cancel', views.taskCancel, name='taskcancel'),
+    path('rate/<int:pk>', views.rate, name='rate'),
 ]
-
-
-

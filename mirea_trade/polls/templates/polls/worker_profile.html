@@ -5,32 +5,35 @@
 <div class="worker__profile mt-3">
     <div class="container">
         <div class="row">
-            <img style="width: 100px; height: 100px; border-radius: 100%;"
-                                src="{{user.user.userprofile.photo}}">
-            <h3>Имя: {{ user.user.username }}</h3>
-            <!-- <img src=""> -->
-            {% if user.user.userprofile.about %}
-            <h3>{{user.user.userprofile.about}}</h3>
-            {% endif %}
-            {% if user.userprofile.orders %}
-            <h3>Заказов: {{user.userprofile.orders}}</h3>
-            {% else %}
-            <h3>Заказов: 0</h3>
-            {% endif %}
-            {% if user.user.userprofile.status == 'regular' %}
-            <p>Не является исполнителем</p>
-            {% else %}
-            <p>Исполнитель</p>
-            {% endif %}
-            {% for skill in selected_skills %}
-            <p>{{skill.name}}</p>
-            {% endfor %}
-            {% if user.user.userprofile.contact_link %}
-            <p>Телеграм: <a style="color: #000;"
-                    href="https://t.me/{{user.user.userprofile.contact_link}}">{{user.user.userprofile.contact_link}}</a>
-            </p>
-            {% endif %}
+            <div class="col-1 me-3">
+                <img style="max-width: 100px; height: auto; border-radius: 100%;" src="{{user.photo.url}}" alt="photo">
+            </div>
+            <div class="col-lg-7">
 
+                <h3>Имя: {{ user.user.username }}</h3>
+                <!-- <img src=""> -->
+                {% if user.about %}
+                <h3>ABPUT: {{user.about}}</h3>
+                {% endif %}
+                {% if user.orders %}
+                <h3>Заказов: {{user.orders}}</h3>
+                {% else %}
+                <h3>Заказов: 0</h3>
+                {% endif %}
+                {% if user.status == 'regular' %}
+                <p>Не является исполнителем</p>
+                {% else %}
+                <p>Исполнитель</p>
+                {% endif %}
+                {% for skill in selected_skills %}
+                <p>{{skill.name}}</p>
+                {% endfor %}
+                {% if user.contact_link %}
+                <p>Телеграм: <a style="color: #000;"
+                        href="https://t.me/{{user.user.userprofile.contact_link}}">{{user.user.userprofile.contact_link}}</a>
+                </p>
+                {% endif %}
+            </div>
 
             <!-- <div class=" card mb-3 col-lg-6 me-3" style="max-width: 540px;">
             <div class="row g-0">
@@ -93,7 +96,7 @@
                 {% for comment in comments %}
                 <div class="comment-text">
                     <img src="{{user.userprofile.photo}}" alt="">
-                    
+
                     <p>{{comment.description}}</p>
                 </div>
                 {% endfor %}

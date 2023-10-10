@@ -5,16 +5,20 @@
 <div class="worker__profile mt-3">
     <div class="container">
         <div class="row">
-            <h3>{{ user.username }}</h3>
-            <img src="">
-            <h3>{{user_profile.about}}</h3>
-            <h3>Рейтинг: {{user_profile.orders}}</h3>
-            <p>{{user_profile.status}}</p>
-            {% for skill in selected_skills %}
-            <p>{{skill.name}}</p>
-            {% endfor %}
-            <p>{{user_profile.contact_link}}</p>
-
+            <div class="col-1 me-3">
+                <img style="max-width: 100px; height: auto; border-radius: 100%;" src="{{user_profile.photo.url}}"
+                    alt="photo">
+            </div>
+            <div class="col-3">
+                <p>Имя: {{ user.username }}</з>
+                <p>Информация: {{user_profile.about}}</p>
+                <p>Рейтинг: {{user_profile.rating}}</p>
+                <p>Статус: {{user_profile.status}}</p>
+                <p>Телеграм: {{user_profile.contact_link}}</p>
+            </div>
+            <div class="col-4">
+                <p> Предметы: {% for skill in selected_skills %} {{skill.name}} {% endfor %}</p>
+            </div>
         </div>
     </div>
 </div>
@@ -26,24 +30,31 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 <div class="col-lg-8 pe-0">
-                    <input name="description" type="text" id="MyCommentArea" class="form-control" placeholder="Введите комментарий"
-                      maxlength="100" required>
+                    <input name="description" type="text" id="MyCommentArea" class="form-control"
+                        placeholder="Введите комментарий" maxlength="100" required>
                 </div>
-                <div class="mt-2">  
-                    <button type="submit" class="btn btn-primary">Отправить</button>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-primary mb-3">Отправить</button>
                 </div>
                 {% if flug == False %}
                 <p style="color: red">Вы можете отправлять один комментарий в минуту</p>
                 {% endif %}
             </form>
 
-            <div class="col-lg-8">
-                {% for i in comments %}
-                <div class="comment-text">
-                    <p>{{i.description}}</p>
+            {% for i in comments %}
+            <div class="col-lg-8 mb-2">
+                <div class="row">
+                    <div class="col-1 me-1">
+                        <img style="max-width: 50px; height: auto; border-radius: 100%;" src="{{i.author.photo.url}}" alt="sdfsdf">
+                    </div>
+                    <div class="comment-text col-7">
+                        <p class="mb-0">{{i.author}}</p>
+                        <p class="mb-0">{{i.description}}</p>
+                    </div>
+
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>

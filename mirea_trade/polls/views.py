@@ -10,6 +10,8 @@ from .forms import UserProfileForm, TaskForm, OrderForm, ContactForm, SignUpForm
 from django.urls import reverse
 from django.utils import timezone
 
+from django.core.files.storage import FileSystemStorage
+
 from django.http import JsonResponse
 
 from .models import User
@@ -70,18 +72,6 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
-
-def myTasks(request):
-
-    print('asdasdasdasdasd')
-    user_tasks = Task.objects.filter(executor=request.user.userprofile)
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA', user_tasks)
-    user_profiles = UserProfile.objects.all()
-    context = {'user_tasks': user_tasks,
-               'user_profiles': user_profiles,
-               }
-
-    return render(request, 'polls/task.html', context)
 
 
 def home(request):
@@ -308,6 +298,11 @@ def editProfile(request):  # заполнение анкеты -> становл
 
         form = UserProfileForm(request.POST, instance=user_profile)
         if form.is_valid():
+            # if request.FILES['myphoto']:
+            #     myphoto = request.FILES['myphoto']
+            #     fs = FileSystemStorage()
+            #     photoname = fs.save(myphoto.name, myphoto)
+            #     uploaded_file_url = fs.url(photoname)
             selected_skills = form.cleaned_data.get('skills')
             user_profile.skills.set(selected_skills)
             user_profile.status = 'worker'
@@ -333,6 +328,8 @@ def editProfile(request):  # заполнение анкеты -> становл
 
 
 def currentProfile(request):
+    a = UserProfile()
+    print('ASKJEKAJSDKL',a.photo)
     if request.user.is_authenticated is False:
         return redirect('signin')
     user = UserProfile.objects.get(user=request.user)
@@ -352,7 +349,7 @@ def otherProfile(request, username):
     # получаем пользователя, к которому зашли на страницу
     user = get_object_or_404(User, username=username)
     # получаем список комментариев к этому пользователю
-    comments = Comment.objects.filter(executor=user.userprofile)
+    comments = Comment.objects.filter(executor=user.userprofile).order_by('-created')
     # user_profile - хозяин страницы, как экземпляр UserProfile
     user_profile = user.userprofile
     selected_skills = user_profile.skills.all()  # получаем все skills этого хозяина
@@ -454,28 +451,31 @@ def settings(request):
 
 
 def fullTask(request, pk):
-
     task = get_object_or_404(Task, pk=pk)
-
     context = {'task': task}
-
     return render(request, 'polls/some_task.html', context)
 
+def myTasks(request):
 
-def myJobs(request):
-    
-    user_jobs = Task.objects.filter(author=request.user.userprofile)
-
-    context = {'user_jobs': user_jobs,
+    print('asdasdasdasdasd')
+    user_tasks = Task.objects.filter(executor=request.user.userprofile)
+    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA', user_tasks)
+    user_profiles = UserProfile.objects.all()
+    context = {'user_tasks': user_tasks,
+               'user_profiles': user_profiles,
                }
 
+    return render(request, 'polls/task.html', context)
+
+def myJobs(request):
+    user_jobs = Task.objects.filter(author=request.user.userprofile)
+    print('GOVNOO', user_jobs)
+    context = {'user_jobs': user_jobs, }
     return render(request, 'polls/myjobs.html', context)
 
 
 def myOrder(request, pk):
-
     order = get_object_or_404(Task, pk=pk)
-
     context = {'order': order}
 
     return render(request, 'polls/some_order.html', context)
@@ -490,3 +490,47 @@ def deleteTask(request, pk):
         return redirect('myjobs')
     context = {'task': task, }
     return render(request, 'polls/myjobs.html', context)
+
+
+def taskAccept(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+
+    if request.user == task.executor.user:
+        task.status = 'accept'
+        task.save()
+        return redirect('mytasks')
+    context = {'task': task, }
+    return render(request, 'polls/myjobs.html', context)
+
+def taskCancel(request, pk):
+    print("CANCEL")
+    task = get_object_or_404(Task, pk=pk)
+    print(task.status)
+    if request.user == task.executor.user:
+        task.status = 'cancel'
+        task.save()
+        return redirect('mytasks')
+    context = {'task': task, }
+    return render(request, 'polls/myjobs.html', context)
+
+
+def rate(request, pk):
+    task = Task.objects.get(pk=pk)
+    executor_username = task.executor.pk
+    userprofile = UserProfile.objects.get(user=executor_username)
+    print(' TASK !!! ',task.executor)
+    print(userprofile)
+    print(task.executor.rating)
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        print('RATING',rating)
+        userprofile.rating += int(rating)
+        userprofile.save()
+        return redirect('myjobs')
+    print(task.executor.rating)
+    return render(request, 'polls/myjobs.html')
+
+
+
+    # executor = UserProfile.objects.get()
+    # if request.user = task.executor.user:

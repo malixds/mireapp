@@ -49,7 +49,7 @@ class UserProfile(models.Model):
     contact_link = models.CharField(max_length=32)
 
     photo = models.ImageField(upload_to='mirea_trade/images/',
-                              default='mirea_trade/images/profile(1).png', null=True, blank=True)
+                              default='mirea_trade/images/1.png', null=True, blank=True)
 
     rank = models.CharField(max_length=20, default='Новичок')
 
@@ -61,10 +61,10 @@ class UserProfile(models.Model):
     # is_active = models.BooleanField(default=False)
 
 
-@receiver(pre_save, sender=UserProfile)
-def set_default_photo(sender, instance, **kwargs):
-    if not instance.photo:
-        instance.photo = 'mirea_trade/images/allmight_woman.png'
+# @receiver(pre_save, sender=UserProfile)
+# def set_default_photo(sender, instance, **kwargs):
+#     if not instance.photo:
+#         instance.photo = 'mirea_trade/images/allmight_woman.png'
 
 
 class Task(models.Model):
@@ -74,6 +74,8 @@ class Task(models.Model):
         UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=100)
     skills = models.ManyToManyField(Skill, related_name='tasks')
+    status = models.CharField(max_length=20, default='default')
+    report = models.IntegerField(default=0)
     description = models.TextField()
     images = models.ImageField(
         null=True, blank=True, upload_to='images/', default='free-icon-user-149071.png')

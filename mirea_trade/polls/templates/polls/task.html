@@ -1,27 +1,50 @@
 {% extends 'app.html' %}
+{%load static%}
 
 {% block content %}
 
 <div class="task">
     <div class="container">
         <div class="task__inner">
-            {% if task in user_tasks %}
-            {% for task in user_tasks %}
-            <div class="task__item col-lg-9 col-sm-10 col-xs-12 mt-3 p-2"
-                style="border-radius: 10px; border: 2px solid #0d6efd;">
-                <h5 class="task__item-name">
-                    {{task.author}}
-                </h5>
-                <p>
-                    {{task.description}}
-                </p>
-                <p>{{task.price}}</p>
+            {% if user_tasks %}
+                {% for task in user_tasks %}
+                    {% if task.status == 'default'%}
+                    <div class="task__item col-lg-9 col-sm-10 col-xs-12 mt-3 p-2"
+                        style="border-radius: 10px; border: 2px solid #0d6efd;">
+                        <div class="wrapper__task d-flex" style="justify-content: space-between;">
+                            <div>
+                                <h5 class="task__item-name">
+                                    Заказчик: {{task.author}}
+                                </h5>
+                            </div>
+                            <div class="">
+                                <form method="POST" action="{% url 'taskaccept' task.pk %}">
+                                    {% csrf_token %}
+                                    <button class="btn p-0 me-1"><img src="{% static 'mirea_trade/images/accept.png' %}" alt=""
+                                            style="max-width:25px; height: auto;"></button>
+                                </form>
+                                <form method="POST" action="{% url 'taskcancel' task.pk %}">
+                                    {% csrf_token %}
+                                    <button class="btn p-0 me-1"><img src="{% static 'mirea_trade/images/cancel.png' %}" alt=""
+                                            style="max-width:18px; height: auto;"></button>
+                                </form>
+                            </div>
+                        </div>
+                        <p>
+                            Задание: {{task.description}}
+                        </p>
+                        <p>Цена: {{task.price}}</p>
 
-                <p>{{task.date}}</p>
-                <p>TG: {{task.author.contact_link}}</p>
-                <a href="{% url 'fulltask' pk=task.pk %}">Подробнее</a>
-            </div>
-            {% endfor %}
+                        <p>Дата выполнения: {{task.date}}</p>
+                        <p>Телеграм: {{task.author.contact_link}}</p>
+                        <a href="{% url 'fulltask' pk=task.pk %}">Подробнее</a>
+                    </div>
+                    {% elif task.status == 'cancel' %}
+                    <h5>Вы отменили выполнение этого задания</h5>
+                    {% else %}
+                    <h5>Вы отметили это задание выполненным</h5>
+                    {% endif %}
+                {% endfor %}
             {% else %}
             <h4 style="margin-top: 2rem; text-align: center;">У вас еще нет заданий</h4>
             {% endif %}
