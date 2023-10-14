@@ -234,10 +234,10 @@ body {
     background-repeat: repeat-x;
 }
 
-.rating__group:focus-within {
+/* .rating__group:focus-within {
     outline: 0.2em solid #4a90e2;
     outline-offset: 0.2em;
-}
+} */
 
 /* Star */
 

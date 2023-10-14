@@ -35,21 +35,13 @@ class UserProfile(models.Model):
     # email = models.CharField(max_length=254)
     # password = models.CharField(max_length=20)
     about = models.TextField(null=True, blank=True)
-
     skills = models.ManyToManyField(Skill, related_name='providers')
-
     rating = models.FloatField(null=True, blank=True, default=0)
-
     status = models.CharField(max_length=20, default='regular')
-
     feedback = models.IntegerField(default=0)
-
     created = models.DateTimeField(auto_now_add=True)
-
     orders = models.IntegerField(default=0)
-
     contact_link = models.CharField(max_length=32)
-
     photo = models.ImageField(upload_to='mirea_trade/images/',
                               default='mirea_trade/images/1.png', null=True, blank=True)
 
