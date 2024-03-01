@@ -9,6 +9,7 @@ from .models import UserProfile, Skill, Task, Comment
 from .forms import UserProfileForm, TaskForm, OrderForm, ContactForm, SignUpForm, CommentForm
 from django.urls import reverse
 from django.utils import timezone
+from django.conf import settings
 
 from django.core.files.storage import FileSystemStorage
 
@@ -16,7 +17,31 @@ from django.http import JsonResponse
 
 from .models import User
 # from .models import Worksheet
-# Create your views here.
+
+def get_subjects():
+    skill1, created1 = Skill.objects.get_or_create(name='Электротехника')
+    skill2, created2 = Skill.objects.get_or_create(name='Информатика')
+    skill3, created3 = Skill.objects.get_or_create(name='Математическая статистика')
+    skill4, created3 = Skill.objects.get_or_create(name='Математический анализ')
+    skill5, created3 = Skill.objects.get_or_create(name='Схемотехника')
+    skill6, created3 = Skill.objects.get_or_create(name='Базы данных')
+    skill7, created3 = Skill.objects.get_or_create(name='Линейная алгебра')
+    list_of_subjects = []
+    current_locals = list(locals().items())
+    for skill_name, skill_obj in current_locals:
+        if 'skill' in skill_name and isinstance(skill_obj, Skill):
+            list_of_subjects.append(skill_obj)
+    print(list_of_subjects)
+    return list_of_subjects
+
+
+def home(request):
+    return render(request, 'polls/home.html')
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
 
 
 def signinPage(request):
@@ -33,7 +58,6 @@ def signinPage(request):
 
         if user:
             user = authenticate(request, username=username, password=password)
-
             if user is not None:
                 login(request, user)
                 return redirect('home')
@@ -68,35 +92,19 @@ def signupPage(request):
     return render(request, 'polls/signup.html', context)
 
 
-def logoutUser(request):
-    logout(request)
-    return redirect('home')
-
-
-
-def home(request):
-    return render(request, 'polls/home.html')
-
-
 @login_required
 def for_worker(request, pk):
 
     if request.user.is_authenticated is False:
         return redirect('signin')
-
     user_profile = get_object_or_404(User, pk=pk)
-
     if request.method == "POST":
-
         form = OrderForm(request.POST, request.FILES)
-
         if form.is_valid():
-
             task = form.save(commit=False)
             author_profile = request.user.userprofile
             task.author = author_profile
             task.kind = 'order'
-
             if user_profile:
 
                 task.executor = user_profile.userprofile
@@ -106,23 +114,14 @@ def for_worker(request, pk):
                 }
                 return JsonResponse(response_data)
         else:
-
             print(form.errors)
-
     else:
-
         form = OrderForm()
-
     context = {'user_profile': user_profile,
                'form': form,
                }
 
     return render(request, 'polls/for_worker.html', context)
-
-
-# def form_worker(request):
-
-#     return render(request, 'polls/form_worker.html')
 
 
 def is_ajax(request):
@@ -159,29 +158,32 @@ def freeTask(request, task_id=None):
 
     if request.user.is_authenticated is False:
         return redirect('signin')
-    skill1, created1 = Skill.objects.get_or_create(name='Электротехника')
-    skill2, created2 = Skill.objects.get_or_create(name='Информатика')
-    skill3, created3 = Skill.objects.get_or_create(
-        name='Математическая статистика')
     user = request.user
     user_profile = UserProfile.objects.get(user=user)
     if not user.is_authenticated:
         return redirect('signin')
-
     task = None
-
     if task_id:
         try:
             task = Task.objects.get(pk=task_id)
         except Task.DoesNotExist:
             pass
-
     if request.method == 'POST':
         form = TaskForm(request.POST, request.FILES, instance=task)
+        print("POST Data:", request.POST)
+        print("Files Data:", request.FILES)
         if form.is_valid():
+            print("POST Data:", request.POST)
+            print("Files Data:", request.FILES)
             print('FORMA OK ')
+            print("requeest files:", request.FILES)
+            if 'files' in request.FILES:
+                pritn(request.FILES)
+                print('asdas')
             task = form.save(commit=False)
-
+            # task.files = request.FILES['files']
+            print("TASK FILES", task.files)
+            # print(f"Задача сохранена с файлом {task.files.url}")
             task.author = request.user.userprofile
             contact_link = request.POST.get('contact_link')
             user_profile.contact_link = contact_link
@@ -192,19 +194,16 @@ def freeTask(request, task_id=None):
                 'success': 'AAA',
             }
             return JsonResponse(response_data)
-
         else:
             print('FORM NE OK OWIBKA !!!!!!!!!!!!!!')
             print(form.errors)
-
     else:
         form = TaskForm()
 
     context = {
         'form': form,
-        'skills': [skill1, skill2, skill3],
+        'skills': get_subjects(),
     }
-
     return render(request, 'polls/make_free_task.html', context)
 
 
@@ -213,7 +212,6 @@ def success(request):
 
 
 def search(request):
-
     user_profiles = UserProfile.objects.all()
     profiles = user_profiles
 
@@ -222,7 +220,6 @@ def search(request):
         print(selected_subjects)
         if selected_subjects:
             profiles = user_profiles.filter(skills__name__in=selected_subjects)
-
         profile_data = [{
             'username': profile.user.username,
             'about': profile.about,
@@ -241,20 +238,15 @@ def search(request):
 
 
 def profileComments(request):
-
     comments = Comment.objects.filter(executor=request.user)
-
     print('COMMENTS:', comments)
-
     context = {
         'comments': comments,
     }
-
     return render(request, 'polls/worker_profile.html', context)
 
 
 def comment(request, username):
-
     print('COMMENTS!!!!!!!')
 # Получите объект UserProfile по его ID
     user_profile = UserProfile.objects.get(username=username)
@@ -289,10 +281,6 @@ def editProfile(request):  # заполнение анкеты -> становл
     #  который предоставляет различные методы, в данном случае - get, которые обращается в базе данных
     #  в UserProfile полe user, равное текущему авториз. пользователю request.user
     # Получение или создание существующих объектов Skill
-    skill1, created1 = Skill.objects.get_or_create(name='Электротехника')
-    skill2, created2 = Skill.objects.get_or_create(name='Информатика')
-    skill3, created3 = Skill.objects.get_or_create(
-        name='Математическая статистика')
 
     if request.method == 'POST':
 
@@ -321,17 +309,16 @@ def editProfile(request):  # заполнение анкеты -> становл
     context = {
         'form': form,
         'user_profile': user_profile,
-        'skills': [skill1, skill2, skill3],
+        'skills': get_subjects(),
     }
 
     return render(request, 'polls/form_worker.html', context)
 
 
 def currentProfile(request):
-    a = UserProfile()
-    print('ASKJEKAJSDKL',a.photo)
     if request.user.is_authenticated is False:
         return redirect('signin')
+    star_raiting = range(1, 6)
     user = UserProfile.objects.get(user=request.user)
     comments = Comment.objects.filter(executor=user)
     print(comments)
@@ -340,6 +327,7 @@ def currentProfile(request):
         'user': user,
         'selected_skills': selected_skills,
         'comments': comments,
+        'star_raiting': star_raiting
     }
     return render(request, 'polls/worker_profile.html', context)
 
@@ -348,6 +336,7 @@ def otherProfile(request, username):
 
     # получаем пользователя, к которому зашли на страницу
     user = get_object_or_404(User, username=username)
+    star_raiting = range(1, 6)
     # получаем список комментариев к этому пользователю
     comments = Comment.objects.filter(executor=user.userprofile).order_by('-created')
     # user_profile - хозяин страницы, как экземпляр UserProfile
@@ -358,7 +347,6 @@ def otherProfile(request, username):
     form = None
 
     if request.method == 'POST':
-
         last_comment_time = request.user.userprofile.last_comment_time
         current_time = timezone.now()
         time_difference = current_time - last_comment_time
@@ -368,23 +356,17 @@ def otherProfile(request, username):
             flug = True
             if form.is_valid():
                 print(form.errors)
-
-                # print('FORMA OK!')
                 comment = form.save(commit=False)
                 # Создайте новый комментарий на основе данных из формы, связав его с профилем пользователя
-
                 comment.author = request.user.userprofile
                 comment.executor = user_profile
                 request.user.userprofile.last_comment_time = current_time
                 request.user.userprofile.save()
                 print('TEXT:', comment.description)
-                # form.text =
                 comment.save()
-
             else:
                 print('FORMA NE OK!')
                 print(form.errors)
-
         elif time_difference.total_seconds() < 60:
             flug = False
         else:
@@ -398,18 +380,14 @@ def otherProfile(request, username):
         'comment': comment,
         'comments': comments,
         'flug': flug,
+        'star_raiting': star_raiting,
     }
     print('asdasdasdasdasdasd')
     return render(request, 'polls/other_worker_profile.html', context)
 
 
 def settings(request):
-    user_profile, created = UserProfile.objects.get_or_create(
-        user=request.user)
-    skill1, created1 = Skill.objects.get_or_create(name='Электротехника')
-    skill2, created2 = Skill.objects.get_or_create(name='Информатика')
-    skill3, created3 = Skill.objects.get_or_create(
-        name='Математическая статистика')
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
 
     if request.method == "POST":
         if user_profile.status == 'worker':
@@ -435,24 +413,19 @@ def settings(request):
     context = {
         'form': form,
         'user_profile': user_profile,
-        'skills': [
-            Skill.objects.get_or_create(name='Электротехника'),
-            skill2,
-            skill3
-        ],
+        'skills': get_subjects(),
     }
 
     return render(request, 'polls/settings.html', context)
 
 
-# def createComment(request):
-
-    # comment =
-
-
 def fullTask(request, pk):
     task = get_object_or_404(Task, pk=pk)
-    context = {'task': task}
+    selected_skills = task.skills.all()
+    context = {
+        'task': task,
+        'selected_skills': selected_skills,
+    }
     return render(request, 'polls/some_task.html', context)
 
 def myTasks(request):
@@ -532,13 +505,13 @@ def rate(request, pk):
             userprofile.feedback += 1
             print('Количество отзывов после операции', userprofile.feedback)
             userprofile.save()
+            result = 0
 
-        if task.report != 0:  # если оценка уже стоит, но пользователь хочет ее изменить
+        elif task.report != 0:  # если оценка уже стоит, но пользователь хочет ее изменить
             result = int(rating)-task.report  # определяем разницу между старой и новой оценкой
         else:
             result = 0  # если никакой оценки нет, то разность равна 0
         task.save() # сохраняем изменения
-        print('Разнциа между новой оценкой и старой', result)
         if result < 0:  # если пользователь уменьшил оценку
             # то он старой оценки отнимаем 
             userprofile.rating = userprofile.rating-abs(result)/userprofile.feedback

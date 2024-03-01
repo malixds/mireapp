@@ -12,21 +12,32 @@
             <div class="jobs__inner-item d-flex col-lg-8 p-4 mt-3"
                 style="border: 2px solid #0d6efd; border-radius: 1rem; justify-content: space-between;">
                 <div class="jobs__item-info">
-
                     <h5 class="">Исполнитель: {{job.executor}}</h5>
-
                     <h5 class="">Заговок: {{job.title}}</h5>
-
                     <p class="m-0">Цена: {{job.price}} р.</p>
                     <p class="m-0">Дата исполнения: {{job.date}}</p>
                 </div>
                 <div class="jobs__item-delete">
-                    <form method="POST" action="{% url 'deljobs' job.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary"></button>
-                    </form>
+
+                    <button class="del__btn-icon" id="delBtn"><img class="del__btn-img" src="{% static 'mirea_trade/images/trash.png' %}" alt=""></button>
+                    <div class="del__modal" id="myModal">
+                        <div class="del__modal-content">
+                            <span class="del__close">&times;</span>
+                            <p>Вы точно хотите удалить задание?</p>
+                            <form method="POST" action="{% url 'deljobs' job.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Удалить</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <script>
+                document.getElementById('openConfirmationModal').addEventListener('click', function () {
+                    $('#confirmationModal').modal('show');
+                });
+            </script>
+
             {% elif job.status == 'cancel' %}
             <div class="jobs__inner-item d-flex col-lg-8 p-4 mt-3"
                 style="border: 2px solid #0d6efd; border-radius: 1rem; justify-content: space-between;">
@@ -46,11 +57,21 @@
                 style="border: 2px solid #0d6efd; border-radius: 1rem; justify-content: space-between;">
                 <div class="jobs__item-info">
                     <h5>Исполнитель отметил это задания, как выполненное</h5>
+                    {% if job.report%}
+                    <p class="mb-1">Вы уже оставили оценку исполнителю: {{job.report}} <br> Но можете ее изменить</p>
+                    {%else%}
+
+                    {% endif %}
+
+                    <p class="mb-1">На странице профиля исполнителя вы можете оставить отзыв: <a
+                            style="display: inline !important; color: #000;"
+                            href="{% url 'otherprofile' job.executor.user.username %}">{{job.executor.user.username}}</a>
                     <form method="POST" action="{% url 'rate' job.pk %}">
+                        </p>
                         {% csrf_token %}
 
                         <fieldset class="rating">
-                            <legend class="rating__caption">Оцените выполнение работы</legend>
+                            <p class="rating__caption">Оцените выполнение работы</з>
                             <div class="rating__group">
                                 <input class="rating__star" type="radio" name="rating" value="1" aria-label="Ужасно">
                                 <input class="rating__star" type="radio" name="rating" value="2" aria-label="Сносно">
@@ -62,11 +83,6 @@
                         <button class="btn btn-primary" type="submit">Отправить отзыв</button>
 
                     </form>
-
-
-                    <p>Ваша оценка: {{job.report}}</p>
-                    <p>Оставьте отзыв: </p> <a
-                        href="{% url 'otherprofile' job.executor.user.username %}">{{job.executor.user.username}}</a>
                 </div>
                 <div class="jobs__item-delete">
                     <form method="POST" action="{% url 'deljobs' job.pk %}">

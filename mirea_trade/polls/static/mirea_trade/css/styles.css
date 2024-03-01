@@ -210,7 +210,7 @@ body {
 }
  */
 
- .rating {
+.rating {
     margin: 0 0 1em 0;
     padding: 0;
     border: none;
@@ -264,7 +264,7 @@ body {
     background-image: url('/static/mirea_trade/images/on.svg');
 }
 
-.rating__star:hover ~ .rating__star {
+.rating__star:hover~.rating__star {
     background-image: url('/static/mirea_trade/images/off.svg');
 }
 
@@ -293,4 +293,320 @@ body {
 .rating__star:nth-of-type(5) {
     z-index: 1;
     width: 10em;
+}
+
+.del__btn-img {
+    max-width: 25px;
+    height: auto;
+}
+
+.del__btn-icon {
+    background-color: #fff;
+    border: 0;
+}
+
+.del__modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.del__modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.del__close {
+    color: #aaa;
+    float: right;
+    font-size: 2rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+
+.comment__content-text-desc {
+    line-height: 1.36;
+}
+
+.profile__info {
+    margin-left: 0.5rem;
+}
+
+.profile__name {
+    line-height: 1.8;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+.profile__about {
+    line-height: 1.5;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.profile__status,
+.profile__skill,
+.profile__telegram {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #20d5a4;
+    border-radius: 17px;
+    display: inline-block;
+}
+
+.profile__feedback-rating,
+.profile__feedback-feedback {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 5px;
+    /* background-color: #FFCF48; */
+    /* border-radius: 17px; */
+    color: #fff;
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+.profile__feedback-feedback {
+    padding-bottom: 1px;
+}
+
+.profile__feedback-stars .star {
+    color: white;
+    /* Цвет пустых звезд */
+    font-size: 1.4rem;
+}
+
+.profile__feedback-stars .filled {
+    color: #FFD700;
+    /* Цвет заполненных звезд */
+    font-size: 1.4rem;
+}
+
+.profile__feedback-quality {
+    display: flex;
+}
+
+.worker__profile {
+    background-color: #10244d;
+    color: #fff;
+}
+
+.profile__main {
+    background-color: #f3f4f6;
+}
+
+.profile__info-inner,
+.profile__skill-inner,
+.profile__report-inner {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.underline {
+    height: 3px;
+    background-color: #f3f4f6;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.comment__content-text-author {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.comment__content-text-desc {
+    font-size: 14px;
+}
+
+.comment__content-text-time {
+    color: #a9adb6;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.profile__nav {
+    background-color: #fff;
+    padding: 18px;
+    margin-bottom: 3rem;
+}
+
+.profile__nav-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile__nav-item {
+    display: inline;
+}
+
+.profile__nav-link {
+    font-weight: 400;
+    padding: 18px;
+}
+
+.profile__nav-link:hover {
+    border-bottom: 4px solid #0d6efd;
+    transition: all .1s;
+}
+
+.profile__skill-inner .profile__skill {
+    background-color: #20d5a4;
+    color: #fff;
+    padding: 6px;
+}
+
+@media (max-width: 460px) {
+    .profile__nav {
+        display: none;
+    }
+
+    .profile__main-info {
+        margin-top: 3 rem;
+    }
+}
+
+.fa-regular {
+    margin-right: 0.4rem;
+}
+
+
+.fulltask {
+    background-color: #f3f4f6;
+    height: calc(100vh - 56px);
+}
+
+.fulltask__header {
+    background-color: #fff;
+
+}
+
+.fulltask__content,
+.fulltask__header {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.fulltask__header-title{
+    font-weight: 700;
+}
+
+.fulltask__inner {
+    background-color: #f3f4f6;
+}
+
+.fulltask__header-subject{ 
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    background-color: #0d6efd;
+    border-radius: 17px;
+    display: inline-block;
+    padding: 3px 6px;
+    margin-bottom: 2px;
+}
+
+.fulltask__header-date{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    background-color: #20d5a4;
+    border-radius: 17px;
+    padding: 3px 6px;
+}
+
+.fulltask__header-price{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    background-color: #20d5a4;
+    border-radius: 17px;
+    padding: 3px 6px;
+}
+
+.space {
+    background-color: #f3f4f6;
+    height: 1rem;
+    margin: 0 !important;
+}
+
+.fulltask__author-img {
+    width: 100%;
+    height: auto;
+    /* display: block;
+    margin: 0 auto;  */
+}
+
+.author__info {
+    padding: 0;
+}
+
+.author__img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.fulltask__author-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.fulltask__author-status {
+    font-size: 13px;
+    color: #20d5a4;
+    display: inline-block;
+    font-weight: 600;
+}
+
+
+.card__body-raiting-text{
+    display: inline-block;
+    font-weight: 700;
+    margin-bottom: 1px;
+}
+
+.card-body-rating .star{
+    font-size: 1.3rem;
+}
+
+.card__body-feedback{
+    display: inline-block;
+}
+
+
+.profile__main-input{
+    width: 100%;
+    border: none;
+
+}
+
+/* .button-comment{
+    float: right;
+} */
+
+.button-wrapper{
+    text-align: right;
+}
+
+.button-comment{
+    background-color: #20d5a4 !important;
+    border: 1px solid #20d5a4 !important;
+    color: #a94442;
 }

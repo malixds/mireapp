@@ -69,10 +69,9 @@ class Task(models.Model):
     title = models.CharField(max_length=100)
     skills = models.ManyToManyField(Skill, related_name='tasks')
     status = models.CharField(max_length=20, default='default')
-    report = models.IntegerField(null=True, blank=True)
+    report = models.IntegerField(null=True, blank=True, default=0)
     description = models.TextField()
-    images = models.ImageField(
-        null=True, blank=True, upload_to='images/', default='free-icon-user-149071.png')
+    files = models.FileField(upload_to='mirea_trade/images/', blank=True, null=True)
     price = models.FloatField()
     created = models.DateField(auto_now_add=True)
     # contact_link = models.CharField(max_length=32, null=True, blank=True)

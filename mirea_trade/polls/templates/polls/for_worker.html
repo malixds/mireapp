@@ -30,12 +30,13 @@
 
                     <div class="card-body">
                         <a class="card-body-name mb-1" value="{{user_profile.user.username}}"
-                            style="text-decoration: none; color: #000; cursor: pointer;">{{user_profile.username}}
+                            style="text-decoration: none; color: #000; cursor: pointer; display: block;">{{user_profile.username}}
                         </a>
-                        <p class="card-body-level mb-0">{{user_profile.userprofile.rank}}</p>
-                        <a href="https://t.me/{{user_profile.userprofile.contact_link}}"
-                            style="text-decoration: none; color: #000; cursor: pointer;">Telegram</a>
-                        <div class="d-flex">
+                        {% if user_profile.userprofile.contact_link %}
+                        <a class="profile__telegram" href="https://t.me/{{user_profile.userprofile.contact_link}}"><i
+                                class="message__icon fa-regular fa-message" style="color: #20d5a4;"></i>Телеграм</a>
+                        {% endif %}
+                        <!-- <div class="d-flex">
                             <div class="card-body-reports d-flex" style="display: inline-block;">
                                 <img src="/static/images/chat.png" class="img-fluid" style="width: 15px; height: 15px; margin-top: 1px;
                                                     margin-right: 4px;" alt="">
@@ -48,16 +49,23 @@
                                 <p class="card-body-number-report mb-0" style="font-size: 0.7rem;">
                                     {{user_profile.userprofile.rating}}рейтинг</p>
                             </div>
+                        </div> -->
+                        {% if user_profile.userprofile.rating%}
+                        <div class="card-body-rating">
+                            <p class="card__body-raiting-text">{{user_profile.userprofile.rating}}</p>
+                            <span class="star filled"><i class="fa-solid fa-star fa-2xs"
+                                    style="color: #20d5a4;"></i></span>
+                            {%if user_profile.userprofile.feedback%}
+                            <p class="card__body-feedback">({{user_profile.userprofile.feedback}})</p>
+                            {%else%}
+                            <p class="card__body-feedback">(0)</p>
+                            {%endif%}
                         </div>
+                        {%else%}
+                        <p class="card-body-rating">Нет рейтинга</p>
+                        {%endif%}
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-8 col-xs-9 mb-3">
-                <p>
-                    Обо мне: <br>
-                    {{user_profile.userprofile.about}}
-
-                </p>
             </div>
             <div class="col-lg-8 col-xs-9 mb-4">
                 <h5>Заголовок задание</h5>

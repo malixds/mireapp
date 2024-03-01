@@ -1,46 +1,58 @@
 {% extends 'app.html' %}
 
 {% block content %}
-
+<div class="space"></div>
 <div class="fulltask">
     <div class="container">
         <div class="fulltask__inner">
-            <h4>Заказчик</h4>
-            <div class="author col-lg-8 col-xs-9 mb-4 mt-3 d-flex">
-                <div class="author__img">
-                    <img src="" alt="">
-                </div>
-                <div class="author__info">
-                    <p>{{task.author.user.username}}</p>
-                    <p>ТЕЛЕГРАМ !{{task.author.contact_link}}</p>
-                    <a href="https://t.me/{{task.author.contact_link}}">Telegram</a>
-                </div>
-            </div>
-            <div class="fulltask__title col-lg-8 col-xs-9 mb-4 mt-3">
-                <h4>Заголовок задания</h4>
-                <p>{{task.title}}</p>
-            </div>
-            <div class="fulltask__desc col-lg-8 col-xs-9 mb-4 mt-3">
-                <h4>Описание задачи</h4>
-                <p>{{task.description}}</p>
-            </div>
+            <div class="fulltask__header mb-3">
+                <h4 class="fulltask__header-title">
+                    {{task.title}}
+                </h4>
 
-            <div class="fulltask__files col-lg-8 col-xs-9 mb-4 mt-3">
-                <h4>Приложенные файлы</h4>
-                <p>" ТУТ БУДУТ ФАЙЛЫ "</p>
+                {% for skill in selected_skills %}
+                <p class="fulltask__header-subject">{{skill.name}}</p>
+                {% endfor %}
+                </p>
+                <div class="fulltask__header-info d-flex">
+                    <p class="fulltask__header-date me-3">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        {{task.date}}
+                    </p>
+                    <p class="fulltask__header-price">
+                        <i class="fa-solid fa-ruble-sign"></i>
+                        {{task.price}}
+                    </p>
+                </div>
             </div>
+            <div class="fulltask__content">
+                <!-- <h4>Заказчик</h4> -->
+                <div class="fulltask__content-author col-lg-8 col-xs-9 mb-4 mt-3 row">
+                    <div class="author__img col-1">
+                        <img class="fulltask__author-img" src="{{task.author.photo.url}}" alt="">
+                    </div>
+                    <div class="author__info col-11">
+                        <p class="fulltask__author-name">{{task.author.user.username}}</p>
+                        {%if task.author.status == 'regular'%}
+                        <p class="fulltask__author-status">Заказчик</p>
+                        {%else%}
+                        <p class="fulltask__author-status">Исполнитель</p>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="underline"></div>
+                <div class="fulltask__desc col-lg-8 col-xs-9 mb-4 mt-3">
+                    <p class="fulltask__desc-text">{{task.description}}</p>
+                </div>
 
-            <div class="row fulltask__info">
-                <div class="fulltask__info-budget col-lg-4 col-sm-6 mb-2">
-                    <h5>Бюджет</h5>
-                    <p>{{task.price}}</p>
+                <div class="fulltask__files col-lg-8 col-xs-9 mb-4 mt-3">
+                    <h4>Приложенные файлы</h4>
+                    {% if task.files %}
+                    <img src="{{task.files.url}}" alt="">
+                    {% endif %}
                 </div>
-                <div class="fulltask__info-date col-lg-4 col-sm-6 mb-2">
-                    <h5>Дата выполнения</h5>
-                    <p>{{task.date}}</p>
-                </div>
+                <a class="btn btn-primary" href="https://t.me/{{task.author.contact_link}}">Связаться с клиентом</a>
             </div>
-            <a class="btn btn-primary" href="{{task.author.contact_link}}">Связаться с клиентом</a>
         </div>
     </div>
 </div>

@@ -34,7 +34,7 @@ class UserProfileForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'description', 'images',
+        fields = ['title', 'description', 'files',
                   'price',
                   #   'contact_link',
                   'skills', 'date']
@@ -44,7 +44,7 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['author', 'executor', 'title', 'description',
-                  'images', 'price', 'date',
+                  'files', 'price', 'date',
                   #   'contact_link'
                   ]
 

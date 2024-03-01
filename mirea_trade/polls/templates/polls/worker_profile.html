@@ -1,41 +1,66 @@
 {% extends 'app.html' %}
 
 {% block content %}
+<div class="profile__main">
+    <div class="worker__profile pt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-2 me-3 profile__image">
+                    <img style="max-width: 100%; height: auto;" src="{{user.photo.url}}" alt="photo">
+                    <div class="">
 
-<div class="worker__profile mt-3">
-    <div class="container">
-        <div class="row">
-            <div class="col-1 me-3">
-                <img style="max-width: 100px; height: auto; border-radius: 100%;" src="{{user.photo.url}}" alt="photo">
-            </div>
-            <div class="col-lg-7">
+                    </div>
+                </div>
+                <div class="col-lg-4 profile__info">
+                    <div class="profile__info-info">
+                        <p class="profile__name">{{ user.user.username }}</p>
+                        {% if user.status == 'regular' %}
+                        <p class="profile__status">Не является исполнителем</p>
+                        {% else %}
+                        <p class="profile__status">Исполнитель</p>
+                        {% endif %}
+                    </div>
+                    <p class="profile__info-rank">{{user.user.rank}}</p>
+                    <div class="profile__feedback">
+                        {%if user.rating%}
+                        <div class="profile__feedback-quality">
+                            <div class="profile__feedback-stars">
+                                <p class="profile__feedback-rating">{{user.rating}}</p>
+                                {% for i in star_raiting%}
+                                {% if user.rating >= i%}
+                                <span class="star filled"><i class="fa-solid fa-star fa-2xs"
+                                        style="color: #20d5a4;"></i></span>
+                                {% else %}
+                                <span class="star"><i class="fa-solid fa-star fa-2xs"
+                                        style="color: #ffffff;"></i></span> <!-- Пустая звезда -->
+                                {% endif %}
+                                {% endfor %}
+                                {%if user.feedback%}
+                                <p class="profile__feedback-feedback">({{user.feedback}})</p>
+                                {%else%}
+                                <p class="profile__feedback-feedback">(0)</p>
+                                {%endif%}
+                            </div>
+                        </div>
+                        {%else%}
+                        <p class="profile__feedback-rating">Нет рейтинга</p>
+                        {%endif%}
 
-                <h3>Имя: {{ user.user.username }}</h3>
-                <!-- <img src=""> -->
-                {% if user.about %}
-                <h3>ABPUT: {{user.about}}</h3>
-                {% endif %}
-                {% if user.orders %}
-                <h3>Заказов: {{user.orders}}</h3>
-                {% else %}
-                <h3>Заказов: 0</h3>
-                {% endif %}
-                {% if user.status == 'regular' %}
-                <p>Не является исполнителем</p>
-                {% else %}
-                <p>Исполнитель</p>
-                {% endif %}
-                {% for skill in selected_skills %}
-                <p>{{skill.name}}</p>
-                {% endfor %}
-                {% if user.contact_link %}
-                <p>Телеграм: <a style="color: #000;"
-                        href="https://t.me/{{user.user.userprofile.contact_link}}">{{user.user.userprofile.contact_link}}</a>
-                </p>
-                {% endif %}
-            </div>
+                    </div>
+                    <div class="profile__contact-info">
+                        <!-- {% if user.status == 'regular' %}
+                    <p class="profile__status">Не является исполнителем</p>
+                    {% else %}
+                    <p class="profile__status">Исполнитель</p>
+                    {% endif %} -->
+                        {% if user.contact_link %}
+                        <a class="profile__telegram" href="https://t.me/{{user.user.userprofile.contact_link}}"><i
+                                class="message__icon fa-regular fa-message" style="color: #20d5a4;"></i>Телеграм</a>
+                        {% endif %}
+                    </div>
+                </div>
 
-            <!-- <div class=" card mb-3 col-lg-6 me-3" style="max-width: 540px;">
+                <!-- <div class=" card mb-3 col-lg-6 me-3" style="max-width: 540px;">
             <div class="row g-0">
                 <div class="col-md-4">
                     <img src="/static/images/allmight_woman.jpg" class="img-fluid rounded-start" alt="...">
@@ -51,7 +76,7 @@
                 </div>
             </div>
         </div> -->
-            <!-- <div class="col-lg-6">
+                <!-- <div class="col-lg-6">
                     <h6>Мои предметы</h6>
                     <ul style="list-style-type:none; padding: 0;">
                         <li style="text-decoration: none;"> 
@@ -71,40 +96,86 @@
                         </li>
                     </ul>
                 </div> -->
+            </div>
         </div>
     </div>
-</div>
 
+    <div class="profile__nav">
+        <div class="container">
+            <div class="profile__nav-inner">
+                <ul class="profile__nav-list">
+                    <li class="profile__nav-item">
+                        <a href="" class="profile__nav-link">Информация</a>
+                    </li>
+                    <li class="profile__nav-item">
+                        <a href="" class="profile__nav-link">Предметы</a>
+                    </li>
+                    <li class="profile__nav-item">
+                        <a href="" class="profile__nav-link">Отзывы</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-<div class="reports">
-    <div class="container">
-        <p style="display:inline-block; border-bottom: 2px solid #0d6efd;">Отзывы</p>
-        <div class="row">
-            <!-- <form action="" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="col-lg-8 pe-0">
-                    <input type="text" id="inputTitle" class="form-control" placeholder="Написать комментарий..."
-                        maxlength="100" required>
-                </div>
-                <div class="mt-2">
-                    <button type="submit" class="btn btn-primary" value="Submit">Primary</button>
-                </div>
-            </form> -->
+    <div class="profile__main-info">
+        <div class="container">
+            <div class="col-lg-7 col-sm-12 profile__info-inner">
+                <h5 class="profile__info-inner-title">Информация</h5>
+                <div class="underline"></div>
+                <p class="profile__info-inner-text">
+                    It is a long established fact that a reader will be distracted by the readable content of a page
+                    when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
+                    distribution of letters, as opposed to using 'Content here, content here', making it look like
+                    readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                    default model text, and a search for 'lorem ipsum' will uncover many web sites still in their
+                    infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose
+                    (injected humour and the like).
+                </p>
+            </div>
+        </div>
+    </div>
 
-            <div class="col-lg-8">
+    <div class="profile__main-skill ">
+        <div class="container">
+            <div class="col-lg-7 col-sm-12 profile__skill-inner">
+                <h5 class="profile__skill-inner-title">Предметы</h5>
+                <div class="underline"></div>
+                {% for skill in selected_skills %}
+                <p class="profile__skill">{{skill.name}}</p>
+                {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile__main-reports">
+        <div class="container">
+            <div class="col-lg-7 col-sm-12 profile__report-inner">
+                <h5 class="profile__report-inner-title">Отзывы</h5>
+                <div class="underline"></div>
                 {% for comment in comments %}
-                <div class="comment-text">
-                    <img src="{{user.userprofile.photo}}" alt="">
-
-                    <p>{{comment.description}}</p>
+                <div class="comment__content row">
+                    <div class="comment__content-img col-1">
+                        <img src="{{comment.author.photo}}" alt="">
+                    </div>
+                    <div class="comment__content-text col-11">
+                        <p class="comment__content-text-author m-0">
+                            {{comment.author.user.username}}
+                        </p>
+                        <p class="comment__content-text-time m-0">
+                            {{comment.created}}
+                        </p>
+                        <p class="comment__content-text-desc m-0">
+                            {{comment.description}}
+                        </p>
+                    </div>
                 </div>
                 {% endfor %}
+                </p>
             </div>
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}

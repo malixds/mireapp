@@ -1,63 +1,224 @@
 {% extends 'app.html' %}
 
 {% block content %}
+<div class="profile__main">
+    <div class="worker__profile pt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-2 me-3 profile__image">
+                    <img style="max-width: 100%; height: auto;" src="{{user_profile.photo.url}}" alt="photo">
+                    <div class="">
 
-<div class="worker__profile mt-3">
-    <div class="container">
-        <div class="row">
-            <div class="col-1 me-3">
-                <img style="max-width: 100px; height: auto; border-radius: 100%;" src="{{user_profile.photo.url}}"
-                    alt="photo">
+                    </div>
+                </div>
+                <div class="col-lg-4 profile__info">
+                    <div class="profile__info-info">
+                        <p class="profile__name">{{ user.username }}</p>
+                        {% if user_profile.status == 'regular' %}
+                        <p class="profile__status">Не является исполнителем</p>
+                        {% else %}
+                        <p class="profile__status">Исполнитель</p>
+                        {% endif %}
+                    </div>
+                    <div class="profile__feedback">
+                        {%if user_profile.rating%}
+                        <div class="profile__feedback-quality">
+                            <div class="profile__feedback-stars">
+                                <p class="profile__feedback-rating">{{user_profile.rating}}</p>
+                                {% for i in star_raiting %}
+                                {% if user_profile.rating >= i%}
+                                <span class="star filled"><i class="fa-solid fa-star fa-2xs"
+                                        style="color: #20d5a4;"></i></span>
+                                {% else %}
+                                <span class="star"><i class="fa-solid fa-star fa-2xs"
+                                        style="color: #ffffff;"></i></span> <!-- Пустая звезда -->
+                                {% endif %}
+                                {% endfor %}
+                                {%if user_profile.feedback%}
+                                <p class="profile__feedback-feedback">({{user_profile.feedback}})</p>
+                                {%else%}
+                                <p class="profile__feedback-feedback">(0)</p>
+                                {%endif%}
+                            </div>
+                        </div>
+                        {%else%}
+                        <p class="profile__feedback-rating">Нет рейтинга</p>
+                        {%endif%}
+
+                    </div>
+                    <div class="profile__contact-info">
+                        <!-- {% if user.status == 'regular' %}
+                    <p class="profile__status">Не является исполнителем</p>
+                    {% else %}
+                    <p class="profile__status">Исполнитель</p>
+                    {% endif %} -->
+                        {% if user_profile.contact_link %}
+                        <a class="profile__telegram" href="https://t.me/{{user_profile.contact_link}}"><i
+                                class="message__icon fa-regular fa-message" style="color: #20d5a4;"></i>Телеграм</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- <div class=" card mb-3 col-lg-6 me-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="/static/images/allmight_woman.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Максим</h5>
+                        <p class="card-text">Я студент 4 курса факультета ИИТ. Решаю задачи по физике,
+                            электротехнике, схемотехнике</p>
+                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        <a style="text-decoration: none; color: #000;" href="worker__profile-telegram">Telegram</a>
+                    </div>
+                </div>
             </div>
-            <div class="col-3">
-                <p>Имя: {{ user.username }}</з>
-                <p>Информация: {{user_profile.about}}</p>
-                <p>Рейтинг: {{user_profile.rating}}</p>
-                <p>Количество : {{user_profile.feedback}}</p>
-                <p>Статус: {{user_profile.status}}</p>
-                <p>Телеграм: {{user_profile.contact_link}}</p>
-            </div>
-            <div class="col-4">
-                <p> Предметы: {% for skill in selected_skills %} {{skill.name}} {% endfor %}</p>
+        </div> -->
+                <!-- <div class="col-lg-6">
+                    <h6>Мои предметы</h6>
+                    <ul style="list-style-type:none; padding: 0;">
+                        <li style="text-decoration: none;"> 
+                            Электротехника
+                        </li>
+                        <li style="text-decoration: none;"> 
+                            Физика
+                        </li>
+                        <li style="text-decoration: none;"> 
+                            Матстат
+                        </li>
+                        <li style="text-decoration: none;"> 
+                            Схемач
+                        </li>
+                        <li style="text-decoration: none;"> 
+                            Электротехника
+                        </li>
+                    </ul>
+                </div> -->
             </div>
         </div>
     </div>
-</div>
 
-<div class="reports">
-    <div class="container">
-        <p style="display:inline-block; border-bottom: 2px solid #0d6efd;">Отзывы</p>
-        <div class="row">
-            <form action="" method="POST">
-                {% csrf_token %}
-                <div class="col-lg-8 pe-0">
-                    <input name="description" type="text" id="MyCommentArea" class="form-control"
-                        placeholder="Введите комментарий" maxlength="100" required>
-                </div>
-                <div class="mt-2">
-                    <button type="submit" class="btn btn-primary mb-3">Отправить</button>
-                </div>
-                {% if flug == False %}
-                <p style="color: red">Вы можете отправлять один комментарий в минуту</p>
-                {% endif %}
-            </form>
-
-            {% for i in comments %}
-            <div class="col-lg-8 mb-2">
-                <div class="row">
-                    <div class="col-1 me-1">
-                        <img style="max-width: 50px; height: auto; border-radius: 100%;" src="{{i.author.photo.url}}" alt="sdfsdf">
-                    </div>
-                    <div class="comment-text col-7">
-                        <p class="mb-0">{{i.author}}</p>
-                        <p class="mb-0">{{i.description}}</p>
-                    </div>
-
-                </div>
+    <div class="profile__nav">
+        <div class="container">
+            <div class="profile__nav-inner">
+                <ul class="profile__nav-list">
+                    <li class="profile__nav-item">
+                        <a href="" class="profile__nav-link">Информация</a>
+                    </li>
+                    <li class="profile__nav-item">
+                        <a href="" class="profile__nav-link">Предметы</a>
+                    </li>
+                    <li class="profile__nav-item">
+                        <a href="" class="profile__nav-link">Отзывы</a>
+                    </li>
+                </ul>
             </div>
-            {% endfor %}
         </div>
     </div>
+
+    <div class="profile__main-info">
+        <div class="container">
+            <div class="col-lg-7 col-sm-12 profile__info-inner">
+                <h5 class="profile__info-inner-title">Информация</h5>
+                <div class="underline"></div>
+                <p class="profile__info-inner-text">
+                    {{user_profile.about}}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile__main-skill ">
+        <div class="container">
+            <div class="col-lg-7 col-sm-12 profile__skill-inner">
+                <h5 class="profile__skill-inner-title">Предметы</h5>
+                <div class="underline"></div>
+                {% for skill in selected_skills %}
+                <p class="profile__skill">{{skill.name}}</p>
+                {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile__main-reports">
+        <div class="container">
+            <div class="col-lg-7 col-sm-12 profile__report-inner">
+                <h5 class="profile__report-inner-title">Отзывы</h5>
+                <div class="underline"></div>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="col-lg-12 pe-0">
+                        <input class="profile__main-input" name="description" type="text" id="MyCommentArea" class="form-control"
+                            placeholder="Введите комментарий" maxlength="100" required>
+                    </div>
+                    <div class="button-wrapper mt-3">
+                        <button type="submit button-comment" class="btn mb-3">Отправить</button>
+                    </div>
+                    {% if flug == False %}
+                    <p style="color: red">Вы можете отправлять один комментарий в минуту</p>
+                    {% endif %}
+                </form>
+                <div class="underline"></div>
+                {% for comment in comments %}
+                <div class="comment__content row mb-2">
+                    <div class="comment__content-img col-1">
+                        <img src="{{comment.author.photo}}" alt="">
+                    </div>
+                    <div class="comment__content-text col-11">
+                        <p class="comment__content-text-author m-0">
+                            {{comment.author.user.username}}
+                        </p>
+                        <p class="comment__content-text-time m-0">
+                            {{comment.created}}
+                        </p>
+                        <p class="comment__content-text-desc m-0">
+                            {{comment.description}}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="reports">
+        <div class="container">
+            <p style="display:inline-block; border-bottom: 2px solid #0d6efd;">Отзывы</p>
+            <div class="row">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="col-lg-8 pe-0">
+                        <input name="description" type="text" id="MyCommentArea" class="form-control"
+                            placeholder="Введите комментарий" maxlength="100" required>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary mb-3">Отправить</button>
+                    </div>
+                    {% if flug == False %}
+                    <p style="color: red">Вы можете отправлять один комментарий в минуту</p>
+                    {% endif %}
+                </form>
+
+                {% for i in comments %}
+                <div class="col-lg-8 mb-2">
+                    <div class="row">
+                        <div class="col-1 me-1">
+                            <img style="max-width: 50px; height: auto; border-radius: 100%;"
+                                src="{{i.author.photo.url}}" alt="sdfsdf">
+                        </div>
+                        <div class="comment-text col-7">
+                            <p class="mb-0">{{i.author}}</p>
+                            <p class="mb-0">{{i.description}}</p>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div> -->
 </div>
 
 {% endblock %}

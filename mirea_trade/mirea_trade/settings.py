@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-z4ka_5ttc_4h8*f+g)&@x&%h8vv%h9%+l4xpb3*-v^_=p%jrjm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0']
 
 
 # Application definition
@@ -81,10 +80,25 @@ WSGI_APPLICATION = 'mirea_trade.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mireadb',
+        'USER': 'malixds',
+        'PASSWORD': '130603maxim',
+        'HOST': 'localhost',  # Имя службы в docker-compose.yml
+        'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'miredb',           # Имя вашей базы данных
+#         'USER': 'malixds',         # Ваше имя пользователя
+#         'PASSWORD': '130603maxim', # Ваш пароль
+#         'HOST': 'localhost',      # Хост, на котором запущен PostgreSQL (обычно localhost)
+#         'PORT': '',               # Порт, на котором работает PostgreSQL (по умолчанию 5432)
+#     }
+# }
 
 
 # Password validation
@@ -123,6 +137,7 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+print(STATIC_URL)
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'polls/static/'),
 )
@@ -132,10 +147,11 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'polls/media')
 print('MEDIA_ROOOOOT:', MEDIA_ROOT)
 print('MEDIA UUUURL:', MEDIA_URL)
+print(BASE_DIR)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

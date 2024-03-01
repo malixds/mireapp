@@ -4,7 +4,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('forworker/<int:pk>/', views.for_worker, name='for-worker'),
+    # path('forworker/<int:pk>/', views.for_worker, name='for-worker'),
+    path('search/forworker/<int:pk>/', views.for_worker, name='for-worker'),
     path('formworker/', views.editProfile, name='form-worker'),
     path('tasks/', views.tasks, name='tasks'),
     # path('filter-tasks/', views.filterTasks, name='filter-tasks'),
